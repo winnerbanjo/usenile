@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Careers — Nile</title>
+    <meta name="description" content="Build the commerce Operating System for a continent. Explore internship roles at Nile." />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22%2302663c%22/></svg>" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <style>
+      /* Custom Careers Layout Styles */
+      .careers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 4rem auto;
+        padding: 0 2rem;
+      }
+      .role-card {
+        background: white;
+        border: 1px solid #E2E8F0;
+        border-radius: var(--border-radius-lg);
+        padding: 2.25rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        min-height: 240px;
+      }
+      .role-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05), 0 10px 10px -5px rgba(0,0,0,0.02);
+        border-color: var(--accent-emerald-light);
+      }
+      .role-meta {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+      }
+      .role-title {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 1.25rem;
+      }
+      .role-desc {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+      .role-apply-btn {
+        align-self: flex-start;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--accent-emerald);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: transform 0.2s ease;
+      }
+      .role-apply-btn:hover {
+        transform: translateX(3px);
+      }
+      
+      /* Apply Detail Modal */
+      .careers-modal-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+      .careers-modal-container.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      .careers-modal-backdrop {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(8px);
+      }
+      .careers-modal {
+        position: relative;
+        background: white;
+        width: 90%;
+        max-width: 600px;
+        border-radius: var(--border-radius-lg);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        padding: 3rem;
+        transform: translateY(20px);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        border: 1px solid #E2E8F0;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .careers-modal-container.active .careers-modal {
+        transform: translateY(0);
+      }
+      .modal-close-btn {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        background: none;
+        border: none;
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        cursor: pointer;
+      }
+      .modal-role-title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+      }
+      .modal-role-meta {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--accent-emerald);
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+      }
+      .modal-section-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      .modal-body-text {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+      }
+      .modal-list {
+        padding-left: 1.25rem;
+        margin-bottom: 2rem;
+      }
+      .modal-list li {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin-bottom: 0.5rem;
+      }
+      .modal-action-btn {
+        width: 100%;
+        text-align: center;
+        display: block;
+        padding: 1rem;
+        background-color: var(--accent-emerald);
+        color: white;
+        border-radius: var(--border-radius-md);
+        font-weight: 700;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+      }
+      .modal-action-btn:hover {
+        background-color: #014d2d;
+      }
+    </style>
+  </head>
+  <body class="region-global">
+
+        <!-- Welcome Modal (Personalization Entry Experience) -->
+    <div id="welcome-modal-container" class="welcome-modal-container">
+      <div class="welcome-modal-backdrop"></div>
+      <div class="welcome-modal">
+        <h2>Welcome to Nile.</h2>
+        <p>Let's personalize your experience. Choose where your business is based to configure pricing, currencies, and gateways.</p>
+        <div class="welcome-modal-options">
+          <button class="modal-opt-btn" data-region="ng">
+            <span class="flag-name">Nigeria</span>
+            <span class="arrow">→</span>
+          </button>
+          <button class="modal-opt-btn" data-region="uk">
+            <span class="flag-name">UK</span>
+            <span class="arrow">→</span>
+          </button>
+          <button class="modal-opt-btn" data-region="us">
+            <span class="flag-name">US</span>
+            <span class="arrow">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav id="main-nav">
+      <a href="index.html" class="nav-logo">
+        <img src="/src/assets/nile_logo.png" alt="Nile Logo" height="32" style="margin-right: 0.5rem;" />
+      </a>
+      
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <ul class="nav-links">
+        <!-- Dropdown 1: Platform -->
+        <li class="nav-item-dropdown">
+          <a href="#" class="nav-trigger-link">Platform <span>▾</span></a>
+          <div class="nav-dropdown-panel grid-2-col">
+            <div class="dropdown-group">
+              <span class="dropdown-group-title">PRODUCTS</span>
+              <a href="solutions.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Nile Retail</span>
+                  <span class="dropdown-item-desc">Create high-performance stores</span>
+                </div>
+              </a>
+              <a href="solutions.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><path d="M1 10h22"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Nile Payments</span>
+                  <span class="dropdown-item-desc">Accept localized payment methods</span>
+                </div>
+              </a>
+              <a href="solutions.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Nile Shipping</span>
+                  <span class="dropdown-item-desc">Generate labels & tracking maps</span>
+                </div>
+              </a>
+            </div>
+            
+            <div class="dropdown-group bg-muted">
+              <span class="dropdown-group-title">INTELLIGENCE</span>
+              <a href="ai.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Nile AI Assistant</span>
+                  <span class="dropdown-item-desc">Write listings & support auto-replies</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <!-- Dropdown 2: Solutions -->
+        <li class="nav-item-dropdown">
+          <a href="#" class="nav-trigger-link">Solutions <span>▾</span></a>
+          <div class="nav-dropdown-panel">
+            <div class="dropdown-group">
+              <span class="dropdown-group-title">BY INDUSTRY</span>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; min-width: 320px;">
+                <a href="solutions.html#industries" class="dropdown-item-simple">Fashion</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Beauty</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Food & Services</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Electronics</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Wholesale</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Services</a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Dropdown 3: Resources -->
+        <li class="nav-item-dropdown">
+          <a href="#" class="nav-trigger-link">Resources <span>▾</span></a>
+          <div class="nav-dropdown-panel grid-2-col">
+            <div class="dropdown-group">
+              <span class="dropdown-group-title">COMPANY</span>
+              <a href="about.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5A2.5 2.5 0 006.5 22H20M4 19.5V3.5A2.5 2.5 0 016.5 1M20 3.5V17H6.5"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">About Us</span>
+                  <span class="dropdown-item-desc">Our mission, values & leadership</span>
+                </div>
+              </a>
+              <a href="team.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Our Team</span>
+                  <span class="dropdown-item-desc">Meet the builders of commerce OS</span>
+                </div>
+              </a>
+              <a href="careers.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Careers</span>
+                  <span class="dropdown-item-desc">Join the engineering & product team</span>
+                </div>
+              </a>
+              <a href="security.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Security First</span>
+                  <span class="dropdown-item-desc">Safeguards and encryption models</span>
+                </div>
+              </a>
+            </div>
+            
+            <div class="dropdown-group bg-muted">
+              <span class="dropdown-group-title">SUPPORT</span>
+              <a href="knowledge.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3m0 4h.01"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Knowledge Base</span>
+                  <span class="dropdown-item-desc">Tutorials, guides, and FAQs</span>
+                </div>
+              </a>
+              <a href="contact.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2" ry="2"/><path d="M3 6l9 6 9-6"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Contact Sales</span>
+                  <span class="dropdown-item-desc">Talk to our platform managers</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <li><a href="developers.html">Developers</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+      </ul>
+      
+      <div class="nav-actions">
+        <button class="region-badge">Region <span style="font-size: 0.7rem; margin-left: 0.25rem;">▾</span></button>
+        <a href="https://app.nile.ng" target="_blank" class="btn-link">Log In</a>
+        <a href="https://app.nile.ng" class="btn btn-primary">Get Started</a>
+      </div>
+    </nav>
+
+    <!-- Careers Header Hero -->
+    <header class="pricing-header-hero scroll-reveal">
+      <span class="story-badge">Hiring Interns</span>
+      <h1 style="font-weight: 800; font-size: 4rem; letter-spacing: -0.03em;">Build the OS<br />for a Continent.</h1>
+      <p class="supporting-text" style="font-size: 1.25rem; max-width: 60ch; margin: 1.5rem auto 0 auto; line-height: 1.6;">
+        Nile is growing. We're looking for hungry, smart interns to help us build the infrastructure for millions of businesses. If you're ready to ship real code and content, we're looking for you.
+      </p>
+    </header>
+
+    <!-- Careers Main Sections (Departments) -->
+    <section class="scroll-reveal" style="border-top: 1px solid #F1F5F9; padding: 6rem 0;">
+      <div style="text-align: center; margin-bottom: 4rem; padding: 0 2rem;">
+        <span class="story-badge">Nile Ecosystem</span>
+        <h2 style="font-size: 2.25rem; font-weight: 800; margin-top: 0.5rem; color: var(--text-primary);">Join us in building the unified business operating system for Africa.</h2>
+      </div>
+      
+      <div class="careers-grid">
+        <!-- Card 1: Frontend Intern -->
+        <div class="role-card">
+          <div>
+            <div class="role-meta">Remote / Lagos</div>
+            <h3 class="role-title">Frontend Intern</h3>
+            <p class="role-desc">Collaborate on shipping responsive checkout views, interface micro-animations, and visual analytics dashboards using clean semantic structures.</p>
+          </div>
+          <button class="role-apply-btn" onclick="openApplyModal('frontend')">Apply ➔</button>
+        </div>
+
+        <!-- Card 2: Backend Intern -->
+        <div class="role-card">
+          <div>
+            <div class="role-meta">Remote / Lagos</div>
+            <h3 class="role-title">Backend Intern</h3>
+            <p class="role-desc">Scale database queries, integrate multi-carrier delivery logs, and help optimize checkout gateway routing processes.</p>
+          </div>
+          <button class="role-apply-btn" onclick="openApplyModal('backend')">Apply ➔</button>
+        </div>
+
+        <!-- Card 3: Mobile Dev Intern -->
+        <div class="role-card">
+          <div>
+            <div class="role-meta">Remote / Lagos</div>
+            <h3 class="role-title">Mobile Dev Intern</h3>
+            <p class="role-desc">Help build native mobile wrappers, optimize checkout webview performance, and work on push notification alerts.</p>
+          </div>
+          <button class="role-apply-btn" onclick="openApplyModal('mobile')">Apply ➔</button>
+        </div>
+
+        <!-- Card 4: Content Creator -->
+        <div class="role-card">
+          <div>
+            <div class="role-meta">Remote</div>
+            <h3 class="role-title">Content Creator</h3>
+            <p class="role-desc">Author technical product stories, format platform setup documentation, and assist in producing the Nile Dispatch newsletter.</p>
+          </div>
+          <button class="role-apply-btn" onclick="openApplyModal('content')">Apply ➔</button>
+        </div>
+      </div>
+      
+      <!-- Open Application CTA -->
+      <div style="text-align: center; margin: 6rem auto 2rem auto; max-width: 600px; padding: 0 2rem;">
+        <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.75rem;">Don't see a role that fits? We're always open to exceptional talent.</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem;">Send us your resume and tell us what you'd like to build at Nile.</p>
+        <a href="mailto:business@nile.ng?subject=Nile%20Open%20Internship%20Application" class="btn btn-emerald" style="display: inline-block;">Send us your resume</a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h4 style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.75rem; line-height: 1.2;">Build the business they'll remember.</h4>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.5;">Unified commerce operating system for global brands.</p>
+          <div class="footer-socials" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
+            <a href="https://www.instagram.com/getnile.co/" target="_blank" class="social-link" title="Instagram" style="color: var(--text-secondary); transition: color 0.2s ease, transform 0.2s ease; display: inline-flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.665-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@thewinnerbanjo" target="_blank" class="social-link" title="TikTok" style="color: var(--text-secondary); transition: color 0.2s ease, transform 0.2s ease; display: inline-flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.18.94 1.13 2.27 1.9 3.73 2.14v3.92c-1.63-.03-3.22-.53-4.57-1.45-.48-.33-.92-.72-1.3-1.16v6.97c.07 2.39-1.12 4.67-3.15 5.92-2.02 1.25-4.58 1.43-6.75.46-2.18-.97-3.72-3.08-4.04-5.46-.35-2.58.74-5.18 2.85-6.75 2.1-1.57 4.96-1.8 7.3-.61v4.06c-1.33-.87-3.1-.73-4.27.35-.91.85-1.28 2.14-1 3.35.29 1.21 1.23 2.16 2.44 2.45 1.22.28 2.52-.08 3.38-.99.55-.58.85-1.35.84-2.14V.02z"/></svg>
+            </a>
+          </div>
+        </div>
+        
+        <div class="footer-col">
+          <h5>Platform</h5>
+          <ul class="footer-links">
+            <li><a href="solutions.html">Build</a></li>
+            <li><a href="solutions.html">Sell</a></li>
+            <li><a href="solutions.html">Get Paid</a></li>
+            <li><a href="solutions.html">Ship</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="team.html">Our Team</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="security.html">Security</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Resources</h5>
+          <ul class="footer-links">
+            <li><a href="samples.html">Live Store Samples</a></li>
+            <li><a href="knowledge.html">Knowledge Base</a></li>
+            <li><a href="ai.html">AI Features</a></li>
+            <li><a href="knowledge.html#faq">FAQ</a></li>
+            <li><a href="developers.html">Developers</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Legal</h5>
+          <ul class="footer-links">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="cookies.html">Cookie Policy</a></li>
+            <li><a href="refund-policy.html">Refund Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Compliance</h5>
+          <ul class="footer-links">
+            <li><a href="dpa.html">Data Processing</a></li>
+            <li><a href="merchant-agreement.html">Merchant Agreement</a></li>
+            <li><a href="sla.html">SLA Commitment</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col-news">
+          <h5 style="margin-bottom: 0.5rem;">Nile Dispatch</h5>
+          <p style="font-size: 0.75rem; color: var(--text-secondary);">Modern commerce insights for digital founders.</p>
+          <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed to Nile Dispatch!'); this.reset();">
+            <input type="email" placeholder="you@example.com" required />
+            <button type="submit" class="btn btn-emerald">Join</button>
+          </form>
+        </div>
+      </div>
+      
+            <div class="footer-offices" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2.5rem; padding: 2.5rem 0; border-top: 1px solid #f1f5f9; margin-bottom: 1rem;">
+        <div class="footer-office-col">
+          <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">Nigeria</h5>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">20 Oyinbogbola Street, Ipaja<br/>Lagos, Nigeria</p>
+        </div>
+        <div class="footer-office-col">
+          <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">United Kingdom</h5>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">Work.Life Soho<br/>Waverley House, 9 Noel Street<br/>Soho, London, W1F 8GQ<br/>United Kingdom</p>
+        </div>
+        <div class="footer-office-col">
+          <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">United States</h5>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">The Mill Space<br/>221 West 10th Street, 3rd & 4th Floor<br/>Wilmington, Delaware, DE 19801<br/>United States</p>
+        </div>
+        <div class="footer-office-col">
+          <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">Support</h5>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;"><a href="mailto:business@nile.ng" style="color: var(--accent-emerald); text-decoration: none; font-weight: 500;">business@nile.ng</a></p>
+        </div>
+      </div>
+      
+      <!-- Gigantic Typography Logo -->
+      <div class="footer-giant-logo">Nile</div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Nile Technologies. All rights reserved. Built for ambitious businesses.</span>
+        <div class="footer-status">
+          <div class="status-dot"></div>
+          <span>All Nile Systems Operational</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Interactive Apply Modal -->
+    <div id="careers-modal-container" class="careers-modal-container">
+      <div class="careers-modal-backdrop" onclick="closeApplyModal()"></div>
+      <div class="careers-modal">
+        <button class="modal-close-btn" onclick="closeApplyModal()">✕</button>
+        <div id="modal-content-placeholder">
+          <!-- Dynamic details populate here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Career Modals Script Logic -->
+    <script>
+      const roleCopies = {
+        frontend: {
+          title: "Frontend Intern",
+          meta: "Remote / Lagos — Engineering",
+          desc: "As a Frontend Intern, you will work alongside our design and software teams to build fast, beautiful, and highly responsive user interfaces for the Nile Operating System.",
+          responsibilities: [
+            "Write clean, accessible, semantic HTML5 and responsive CSS blocks.",
+            "Integrate dashboard view components using modern ES6+ JavaScript and bundle configs.",
+            "Polish UI interactions with hardware-accelerated CSS transitions and micro-animations.",
+            "Optimize pages load speeds and audit styling assets for cross-device visual fidelity."
+          ],
+          requirements: [
+            "Familiarity with HTML, CSS, and modular Javascript.",
+            "Basic understanding of developer tools and version control (Git).",
+            "An eye for premium visual details and interest in Stripe-like design aesthetics.",
+            "Passionate about building intuitive software tools for merchant owners."
+          ],
+          mailto: "mailto:business@nile.ng?subject=Application%20for%20Frontend%20Intern%20-%20Nile&body=Hi%20Nile%20Team%2C%0A%0AI'm%20interested%20in%20applying%20for%20the%20Frontend%20Internship.%20Please%20find%20attached%20my%20resume.%0A%0A[Your%20Name]"
+        },
+        backend: {
+          title: "Backend Intern",
+          meta: "Remote / Lagos — Engineering",
+          desc: "As a Backend Intern, you will work on the core processing layer of Nile. You will contribute to scaling payment gateways routing databases and logistics modules.",
+          responsibilities: [
+            "Assist in writing structured API endpoints and documentation.",
+            "Draft database migration parameters and indexes optimizations queries.",
+            "Incorporate Webhook event logs routing from carriers and processors.",
+            "Monitor server latencies and help design fault-tolerant checkout backup triggers."
+          ],
+          requirements: [
+            "Basic exposure to Node.js, Express, or similar server runtimes.",
+            "Understanding of relational databases (PostgreSQL) and SQL parameters.",
+            "Familiarity with REST APIs principles and JSON data routing layouts.",
+            "Strong analytical debugging approach and problem-solving drive."
+          ],
+          mailto: "mailto:business@nile.ng?subject=Application%20for%20Backend%20Intern%20-%20Nile&body=Hi%20Nile%20Team%2C%0A%0AI'm%20interested%20in%20applying%20for%20the%20Backend%20Internship.%20Please%20find%20attached%20my%20resume.%0A%0A[Your%20Name]"
+        },
+        mobile: {
+          title: "Mobile Dev Intern",
+          meta: "Remote / Lagos — Engineering",
+          desc: "As a Mobile Dev Intern, you will assist in porting website management functions into native environments. You'll contribute to optimizing checkout webviews and notification setups.",
+          responsibilities: [
+            "Test hybrid wrapper interfaces layout consistency across iOS and Android.",
+            "Help build client-side offline storage mechanisms.",
+            "Work on push alerts notifications layout and deep links routing structures.",
+            "Audit performance speeds inside native webview components."
+          ],
+          requirements: [
+            "Exposure to React Native, Flutter, or native mobile development platforms.",
+            "Knowledge of JavaScript/TypeScript or mobile lifecycle mechanics.",
+            "Interest in location tracking integrations and mobile checkout flows.",
+            "Eager to learn mobile build profiles compiling pipelines."
+          ],
+          mailto: "mailto:business@nile.ng?subject=Application%20for%20Mobile%20Dev%20Intern%20-%20Nile&body=Hi%20Nile%20Team%2C%0A%0AI'm%20interested%20in%20applying%20for%20the%20Mobile%20Dev%20Internship.%20Please%20find%20attached%20my%20resume.%0A%0A[Your%20Name]"
+        },
+        content: {
+          title: "Content Creator",
+          meta: "Remote — Growth",
+          desc: "As a Content Creator Intern, you will focus on sharing Nile's technical details and creator successes. You will help build our community voice and platform guides.",
+          responsibilities: [
+            "Write helpful platform setup guides and features descriptions.",
+            "Draft case studies highlighting merchant builders successes.",
+            "Edit and compile sections of our weekly Nile Dispatch newsletter.",
+            "Curate visual screenshots and short walkthrough clips for product updates."
+          ],
+          requirements: [
+            "Excellent written and verbal communication in English.",
+            "Interest in e-commerce branding, copywriting, or startup journalism.",
+            "Familiarity with basic image layout or editing tools.",
+            "Passionate about telling compelling merchant developer stories."
+          ],
+          mailto: "mailto:business@nile.ng?subject=Application%20for%20Content%20Creator%20Intern%20-%20Nile&body=Hi%20Nile%20Team%2C%0A%0AI'm%20interested%20in%20applying%20for%20the%20Content%20Creator%20Internship.%20Please%20find%20attached%20my%20resume.%0A%0A[Your%20Name]"
+        }
+      };
+
+      function openApplyModal(roleKey) {
+        const role = roleCopies[roleKey];
+        if (!role) return;
+
+        const placeholder = document.getElementById('modal-content-placeholder');
+        
+        let responsibilitiesHTML = role.responsibilities.map(r => `<li>${r}</li>`).join('');
+        let requirementsHTML = role.requirements.map(req => `<li>${req}</li>`).join('');
+
+        placeholder.innerHTML = `
+          <h2 class="modal-role-title">${role.title}</h2>
+          <div class="modal-role-meta">${role.meta}</div>
+          <p class="modal-body-text">${role.desc}</p>
+          
+          <h4 class="modal-section-title">Core Responsibilities:</h4>
+          <ul class="modal-list">${responsibilitiesHTML}</ul>
+          
+          <h4 class="modal-section-title">Requirements:</h4>
+          <ul class="modal-list">${requirementsHTML}</ul>
+          
+          <a href="${role.mailto}" class="modal-action-btn">Apply Now via business@nile.ng</a>
+        `;
+
+        document.getElementById('careers-modal-container').classList.add('active');
+        document.body.classList.add('modal-open');
+      }
+
+      function closeApplyModal() {
+        document.getElementById('careers-modal-container').classList.remove('active');
+        document.body.classList.remove('modal-open');
+      }
+    </script>
+
+    <!-- Main JS entrypoint -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

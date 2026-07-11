@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nile 3.0 — Unified Commerce Infrastructure</title>
+    <meta name="description" content="Nile is the unified commerce platform for ambitious brands. Accept payments, print shipping labels, track inventory, and grow internationally from one elegant dashboard." />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22%2302663c%22/></svg>" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="region-global">
+
+        <!-- Welcome Modal (Personalization Entry Experience) -->
+    <div id="welcome-modal-container" class="welcome-modal-container">
+      <div class="welcome-modal-backdrop"></div>
+      <div class="welcome-modal">
+        <h2>Welcome to Nile.</h2>
+        <p>Let's personalize your experience. Choose where your business is based to configure pricing, currencies, and gateways.</p>
+        <div class="welcome-modal-options">
+          <button class="modal-opt-btn" data-region="ng">
+            <span class="flag-name">Nigeria</span>
+            <span class="arrow">→</span>
+          </button>
+          <button class="modal-opt-btn" data-region="uk">
+            <span class="flag-name">UK</span>
+            <span class="arrow">→</span>
+          </button>
+          <button class="modal-opt-btn" data-region="us">
+            <span class="flag-name">US</span>
+            <span class="arrow">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav id="main-nav">
+      <a href="index.html" class="nav-logo">
+        <img src="/src/assets/nile_logo.png" alt="Nile Logo" height="32" style="margin-right: 0.5rem;" />
+      </a>
+      
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <ul class="nav-links">
+        <!-- Dropdown 1: Platform -->
+        <li class="nav-item-dropdown">
+          <a href="#" class="nav-trigger-link">Platform <span>▾</span></a>
+          <div class="nav-dropdown-panel grid-2-col">
+            <div class="dropdown-group">
+              <span class="dropdown-group-title">PRODUCTS</span>
+              <a href="solutions.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Nile Retail</span>
+                  <span class="dropdown-item-desc">Create high-performance stores</span>
+                </div>
+              </a>
+              <a href="solutions.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><path d="M1 10h22"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Nile Payments</span>
+                  <span class="dropdown-item-desc">Accept localized payment methods</span>
+                </div>
+              </a>
+              <a href="solutions.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Nile Shipping</span>
+                  <span class="dropdown-item-desc">Generate labels & tracking maps</span>
+                </div>
+              </a>
+            </div>
+            
+            <div class="dropdown-group bg-muted">
+              <span class="dropdown-group-title">INTELLIGENCE</span>
+              <a href="ai.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Nile AI Assistant</span>
+                  <span class="dropdown-item-desc">Write listings & support auto-replies</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <!-- Dropdown 2: Solutions -->
+        <li class="nav-item-dropdown">
+          <a href="#" class="nav-trigger-link">Solutions <span>▾</span></a>
+          <div class="nav-dropdown-panel">
+            <div class="dropdown-group">
+              <span class="dropdown-group-title">BY INDUSTRY</span>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; min-width: 320px;">
+                <a href="solutions.html#industries" class="dropdown-item-simple">Fashion</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Beauty</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Food & Services</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Electronics</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Wholesale</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Services</a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Dropdown 3: Resources -->
+        <li class="nav-item-dropdown">
+          <a href="#" class="nav-trigger-link">Resources <span>▾</span></a>
+          <div class="nav-dropdown-panel grid-2-col">
+            <div class="dropdown-group">
+              <span class="dropdown-group-title">COMPANY</span>
+              <a href="about.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5A2.5 2.5 0 006.5 22H20M4 19.5V3.5A2.5 2.5 0 016.5 1M20 3.5V17H6.5"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">About Us</span>
+                  <span class="dropdown-item-desc">Our mission, values & leadership</span>
+                </div>
+              </a>
+              <a href="team.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Our Team</span>
+                  <span class="dropdown-item-desc">Meet the builders of commerce OS</span>
+                </div>
+              </a>
+              <a href="careers.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Careers</span>
+                  <span class="dropdown-item-desc">Join the engineering & product team</span>
+                </div>
+              </a>
+              <a href="security.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Security First</span>
+                  <span class="dropdown-item-desc">Safeguards and encryption models</span>
+                </div>
+              </a>
+            </div>
+            
+            <div class="dropdown-group bg-muted">
+              <span class="dropdown-group-title">SUPPORT</span>
+              <a href="knowledge.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3m0 4h.01"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Knowledge Base</span>
+                  <span class="dropdown-item-desc">Tutorials, guides, and FAQs</span>
+                </div>
+              </a>
+              <a href="contact.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2" ry="2"/><path d="M3 6l9 6 9-6"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Contact Sales</span>
+                  <span class="dropdown-item-desc">Talk to our platform managers</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <li><a href="developers.html">Developers</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+      </ul>
+      
+      <div class="nav-actions">
+        <button class="region-badge">Region <span style="font-size: 0.7rem; margin-left: 0.25rem;">▾</span></button>
+        <a href="https://app.nile.ng" target="_blank" class="btn-link">Log In</a>
+        <a href="https://app.nile.ng" class="btn btn-primary">Start Building</a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+      <!-- Stripe-style Animated Moving Gradient Background -->
+      <div class="stripe-canvas-bg">
+        <div class="gradient-bubble bubble-1"></div>
+        <div class="gradient-bubble bubble-2"></div>
+        <div class="gradient-bubble bubble-3"></div>
+      </div>
+
+      <div class="hero-content scroll-reveal">
+        <h1>Build the business they'll remember.</h1>
+        <p>
+          Your website is only the beginning. Launch your brand, accept payments, manage customers, fulfill orders, print shipping labels, and grow from one platform designed for modern businesses.
+        </p>
+        <div class="hero-ctas" style="flex-wrap: wrap; gap: 1rem;">
+          <a href="https://app.nile.ng" class="btn btn-emerald">Start Building Free</a>
+          <a href="https://apps.apple.com/us/app/nile-for-business/id6778121842" target="_blank" class="btn btn-outline" style="padding: 0.55rem 1.1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.21.67-2.93 1.49-.62.69-1.16 1.84-1.01 2.96 1.12.09 2.27-.56 2.95-1.39"/></svg>
+            iOS App
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=com.app.nileapp" target="_blank" class="btn btn-outline" style="padding: 0.55rem 1.1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M3.609 1.814L13.783 12 3.609 22.186c-.18.18-.32.1-.32-.15V1.964c0-.25.14-.33.32-.15zm10.89 10.89l2.87 2.87-11.23 6.32 8.36-9.19zm3.5-3.5l3.22 1.81c.5.28.5.74 0 1.02l-3.22 1.81-2.87-2.87 2.87-2.87zm-2.87-2.87l-8.36-9.19 11.23 6.32-2.87 2.87zm-2.87-2.87l-8.36-9.19 11.23 6.32-2.87 2.87z"/></svg>
+            Android App
+          </a>
+        </div>
+        
+        <div class="hero-trust-list">
+          <div class="hero-trust-item">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            No credit card required
+          </div>
+          <div class="hero-trust-item">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Launch in minutes
+          </div>
+          <div class="hero-trust-item">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Trusted by thousands of businesses
+          </div>
+        </div>
+      </div>
+      
+      <!-- Hero Carousel -->
+      <div class="hero-carousel scroll-reveal">
+        <div class="carousel-viewport">
+          <div class="carousel-slide active">
+            <img src="/src/assets/fashion_maker.jpg" alt="Winner Oyebanjo tailoring on sewing machine" />
+          </div>
+          <div class="carousel-slide">
+            <img src="/src/assets/hoodie_design.jpg" alt="Designing a custom brand hoodie on laptop" />
+          </div>
+          <div class="carousel-slide">
+            <img src="/src/assets/fabric_warehouse.jpg" alt="Sourcing rolls of materials in fabric warehouse" />
+          </div>
+          <div class="carousel-slide">
+            <img src="/src/assets/shopping_basket.jpg" alt="Shopping basket full of LOF packages" />
+          </div>
+          <div class="carousel-slide">
+            <img src="/src/assets/shipping_packages.jpg" alt="Fulfillment center packages stacked" />
+          </div>
+        </div>
+        <div class="carousel-indicators">
+          <span class="carousel-dot active" data-slide="0"></span>
+          <span class="carousel-dot" data-slide="1"></span>
+          <span class="carousel-dot" data-slide="2"></span>
+          <span class="carousel-dot" data-slide="3"></span>
+          <span class="carousel-dot" data-slide="4"></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Social Proof Section -->
+    <section class="social-proof scroll-reveal">
+      <div class="partner-logos" style="display: flex; justify-content: center; align-items: center; gap: 3rem; width: 100%; max-width: 900px; margin: 0 auto; padding: 0 1rem; flex-wrap: wrap;">
+        <img src="/src/assets/trusted_brands_pacific.png" alt="Pacific Holdings" style="max-height: 24px; object-fit: contain; filter: grayscale(100%) contrast(1.2); opacity: 0.45; mix-blend-mode: multiply;" />
+        <img src="/src/assets/trusted_brands_dmx.png" alt="DMX" style="max-height: 24px; object-fit: contain; filter: grayscale(100%) contrast(1.2); opacity: 0.45; mix-blend-mode: multiply;" />
+        <img src="/src/assets/trusted_brands_3.png" alt="Greenlife Pharmaceuticals" style="max-height: 24px; object-fit: contain; filter: grayscale(100%) contrast(1.2); opacity: 0.45; mix-blend-mode: multiply;" />
+        <img src="/src/assets/trusted_brands_4.png" alt="Asl travels" style="max-height: 24px; object-fit: contain; filter: grayscale(100%) contrast(1.2); opacity: 0.45; mix-blend-mode: multiply;" />
+      </div>
+      
+      <div class="metrics-container">
+        <div class="metric-card">
+          <div class="metric-num" data-target="25000" data-suffix="+">0</div>
+          <div class="metric-label">Businesses launched</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num region-specific ng-only" data-target="5" data-prefix="₦" data-suffix="B+">0</div>
+          <div class="metric-num region-specific uk-only" data-target="30" data-prefix="£" data-suffix="M+">0</div>
+          <div class="metric-num region-specific us-only" data-target="45" data-prefix="$" data-suffix="M+">0</div>
+          <div class="metric-num region-specific gh-only" data-target="150" data-prefix="GH₵" data-suffix="M+">0</div>
+          <div class="metric-num region-specific global-only" data-target="45" data-prefix="$" data-suffix="M+">0</div>
+          <div class="metric-label">Payments processed</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num" data-target="9" data-prefix="99." data-suffix="%">0</div>
+          <div class="metric-label">Platform uptime</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION: INTERACTIVE FEATURE SWITCHER (Stripe style) -->
+    <section id="feature-switcher" class="feature-switcher-section scroll-reveal">
+      <div class="feature-switcher-header">
+        <span class="story-badge">Unified Commerce Engine</span>
+        <h2>Everything. Finally. Works together.</h2>
+        <p>All your website elements built into a single, high-performance workspace.</p>
+      </div>
+
+      <div class="feature-switcher-tabs">
+        <button class="feature-tab-btn active" data-tab="tab-websites">Websites</button>
+        <button class="feature-tab-btn" data-tab="tab-payments">Payments</button>
+        <button class="feature-tab-btn" data-tab="tab-logistics">Logistics</button>
+        <button class="feature-tab-btn" data-tab="tab-ai">AI Assistant</button>
+      </div>
+
+      <div class="feature-panels-container">
+        <!-- Panel 1: Websites -->
+        <div class="feature-mock-panel active" id="tab-websites">
+          <div style="display:flex; flex-direction:column; gap: 1rem;">
+            <span class="story-badge">Website Builder</span>
+            <h3>Websites that convert.</h3>
+            <p>Create a professional online presence with beautiful, responsive websites. Optimized for mobile, standard custom domains, and sitemaps generated automatically.</p>
+            <a href="https://app.nile.ng" class="portal-link-text">Explore Store builder ➔</a>
+          </div>
+          <div class="story-visual">
+            <img src="/src/assets/storefront_laptop.jpg" alt="Goblin & Coal online website on laptop mockup" />
+          </div>
+        </div>
+
+        <!-- Panel 2: Payments -->
+        <div class="feature-mock-panel" id="tab-payments">
+          <div style="display:flex; flex-direction:column; gap: 1rem;">
+            <span class="story-badge">Payment Router</span>
+            <h3>Accept payments securely.</h3>
+            <p>Accept payments using trusted local and international payment gateways. Dynamic region triggers configure checkout options for bank transfer, cards, or digital wallets.</p>
+            <a href="https://app.nile.ng" class="portal-link-text">Explore Payments ➔</a>
+          </div>
+          <div style="display:flex; justify-content:center; align-items:center; background:#F1F5F9; border-radius:var(--border-radius-lg); height:320px; border: var(--card-border);">
+            <div class="payment-sim-card" style="margin:0;">
+              <div class="payment-sim-header">
+                <span class="payment-sim-title">Nile Checkout Router</span>
+                <span class="payment-gateway-tag">Stripe Active</span>
+              </div>
+              <div class="payment-sim-amount">$39.00</div>
+              <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                <div class="payment-sim-method">💳 Pay with Card</div>
+                <div class="payment-sim-method">🏦 Pay with Bank Transfer</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 3: Logistics -->
+        <div class="feature-mock-panel" id="tab-logistics">
+          <div style="display:flex; flex-direction:column; gap: 1rem;">
+            <span class="story-badge">Order Fulfillment</span>
+            <h3>Logistics, simplified.</h3>
+            <p>Connect with local shipping carriers, print labels automatically, and provide your buyers with transit tracking details directly on interactive maps.</p>
+            <a href="https://app.nile.ng" class="portal-link-text">Explore Shipping ➔</a>
+          </div>
+          <div style="display:flex; flex-direction:column; justify-content:center; padding:2rem; background:#F1F5F9; border-radius:var(--border-radius-lg); height:320px; border: var(--card-border);">
+            <div class="ship-visual-timeline" style="border-radius:12px; box-shadow:var(--card-shadow); border:1px solid #E2E8F0;">
+              <div class="timeline-step active">
+                <div class="step-icon">1</div>
+                <div class="step-content">
+                  <span class="step-title">Order Printed & Packed</span>
+                  <span class="step-time">Lekki Hub, 10:15 AM</span>
+                </div>
+              </div>
+              <div class="timeline-step">
+                <div class="step-icon">2</div>
+                <div class="step-content">
+                  <span class="step-title">Handed to Courier</span>
+                  <span class="step-time">GIG Logistics Express</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 4: AI Assistant -->
+        <div class="feature-mock-panel" id="tab-ai">
+          <div style="display:flex; flex-direction:column; gap: 1rem;">
+            <span class="story-badge">Nile AI Assistant</span>
+            <h3>Automate copy & forecasting.</h3>
+            <p>Write product listings, draft marketing newsletters, summarize weekly order reports, and auto-reply to customer tickets using the embedded AI engine.</p>
+            <a href="https://app.nile.ng" class="portal-link-text">Try Nile AI Compiler ➔</a>
+          </div>
+          <div class="ai-dashboard-mock" style="height:320px; margin:0;">
+            <div class="ai-prompt-input">
+              <span class="ai-prompt-sparkle">✦</span>
+              <span>Nile AI Writer — Click to trigger</span>
+            </div>
+            <div class="ai-response-box" style="font-family:monospace; font-size:0.75rem; background:#0E1410;">
+              <span>Generating marketing copy: "We noticed you left something behind... 💜"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Subpage Navigation Portals -->
+    <section class="subpage-portals scroll-reveal">
+      <a href="solutions.html" class="portal-card">
+        <div class="portal-icon">🧳</div>
+        <h3>Platform Solutions</h3>
+        <p>Explore the full suite of merchant tools: website building, dynamic payment routers, inventory alerts, and automated tracking timelines.</p>
+        <span class="portal-link-text">Explore Solutions ➔</span>
+      </a>
+
+      <a href="ai.html" class="portal-card">
+        <div class="portal-icon">✦</div>
+        <h3>Nile AI Assistant</h3>
+        <p>Generate product listings, write newsletters, auto-reply to customer concerns, and project sales forecasts directly inside your workspace.</p>
+        <span class="portal-link-text">Test AI Features ➔</span>
+      </a>
+
+      <a href="pricing.html" class="portal-card">
+        <div class="portal-icon">🏷️</div>
+        <h3>Transparent Plans</h3>
+        <p>Compare localized platform plans and learn about the custom Nile setup packages built specifically for growing Nigerian brands.</p>
+        <span class="portal-link-text">View Pricing ➔</span>
+      </a>
+    </section>
+
+    <!-- App Consolidation Section ("The Problem") -->
+    <section id="problem-section" class="problem-section scroll-reveal">
+      <div class="problem-header">
+        <h2 id="problem-headline">Everything. Finally. Works together.</h2>
+        <p id="problem-subheading">All your tools built into a single, high-performance workspace.</p>
+      </div>
+      
+      <!-- Scattered app nodes converging on scroll -->
+      <div class="app-consolidation-container">
+        <!-- Center Nile Hub -->
+        <div class="nile-hub" id="nile-hub-display" style="cursor: pointer; transition: all 0.3s ease;">
+          Nile
+          <span>Hub</span>
+        </div>
+        
+        <div class="app-node node-website" data-name="Website" data-icon="🌐" data-status="Online" data-desc="yourbrand.nile.ng">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+          Website
+        </div>
+        <div class="app-node node-payments" data-name="Payments" data-icon="💳" data-status="Active" data-desc="₦1.6M processed">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+          Payments
+        </div>
+        <div class="app-node node-inventory" data-name="Inventory" data-icon="📦" data-status="24 Items" data-desc="All in stock">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          Inventory
+        </div>
+        <div class="app-node node-delivery" data-name="Delivery" data-icon="🚚" data-status="Express" data-desc="GIG Logistics Connected">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10h10zm0 0h4l3-3V8a1 1 0 00-1-1h-6v9z"/></svg>
+          Delivery
+        </div>
+        <div class="app-node node-crm" data-name="CRM" data-icon="👥" data-status="1,842 Buyers" data-desc="94% retention">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          CRM
+        </div>
+        <div class="app-node node-analytics" data-name="Analytics" data-icon="📈" data-status="Revenue" data-desc="+24% this week">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2"/></svg>
+          Analytics
+        </div>
+        <div class="app-node node-marketing" data-name="Marketing" data-icon="✉️" data-status="Dispatch" data-desc="840 emails sent">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+          Marketing
+        </div>
+        <div class="app-node node-invoices" data-name="Invoices" data-icon="🧾" data-status="Paid out" data-desc="100% cleared">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Invoices
+        </div>
+        <div class="app-node node-support" data-name="Support" data-icon="💬" data-status="Auto-Reply" data-desc="AI Chat active">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          Support
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews Grid Section -->
+    <section class="reviews-section scroll-reveal">
+      <div class="reviews-header">
+        <span class="story-badge">Global Testimonials</span>
+        <h2>Loved by entrepreneurs worldwide.</h2>
+        <p>See how creators and fast-growing brands are scaling their websites and logistics routing using Nile.</p>
+      </div>
+
+      <div class="reviews-ticker-container">
+        <!-- Row 1: Sliding Left -->
+        <div class="reviews-ticker-row ticker-row-left">
+          <div class="reviews-ticker-inner">
+            <!-- Review 1: Nigeria -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">
+                    <img src="/src/assets/fashion_founder.jpg" alt="Clara Bello avatar" />
+                  </div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Clara Bello</span>
+                    <span class="review-card-handle">@clarabello</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "We launched our fashion website over a weekend and cleared our first checkout orders before Monday. Nile is amazingly fast."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">Nigeria</span>
+                <span class="review-date">Jul 8, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 2: United Kingdom -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">JS</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">James Sterling</span>
+                    <span class="review-card-handle">@james_sterling</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Nile Payments is seamless. Dynamic routing switch logic sets local banking checkouts and coordinates delivery maps without regional complications."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">United Kingdom</span>
+                <span class="review-date">Jul 5, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 3: United States -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">SL</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Sarah Lin</span>
+                    <span class="review-card-handle">@sarah_lin</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "The automated inventory alerts and Nile AI assistant dashboard writer are highly intuitive. Saved us 10+ hours of support spreadsheets work."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">United States</span>
+                <span class="review-date">Jul 2, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 4: Ghana -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">AS</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Ama Serwaa</span>
+                    <span class="review-card-handle">@ama_serwaa</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Accepting local cards and mobile money checkouts has never been this quick. Settlements are completed without lag."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">Ghana</span>
+                <span class="review-date">Jun 28, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 5: Kenya / Global -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">WM</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Wanjiku Maina</span>
+                    <span class="review-card-handle">@wanjiku_maina</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Nile makes it simple to run an international retail agency. Dynamic pricing configuration is incredibly clean."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">Kenya</span>
+                <span class="review-date">Jun 25, 2026</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Duplicate list for seamless infinite loop -->
+          <div class="reviews-ticker-inner">
+            <!-- Review 1: Nigeria -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">
+                    <img src="/src/assets/fashion_founder.jpg" alt="Clara Bello avatar" />
+                  </div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Clara Bello</span>
+                    <span class="review-card-handle">@clarabello</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "We launched our fashion website over a weekend and cleared our first checkout orders before Monday. Nile is amazingly fast."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">Nigeria</span>
+                <span class="review-date">Jul 8, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 2: United Kingdom -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">JS</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">James Sterling</span>
+                    <span class="review-card-handle">@james_sterling</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Nile Payments is seamless. Dynamic routing switch logic sets local banking checkouts and coordinates delivery maps without regional complications."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">United Kingdom</span>
+                <span class="review-date">Jul 5, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 3: United States -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">SL</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Sarah Lin</span>
+                    <span class="review-card-handle">@sarah_lin</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "The automated inventory alerts and Nile AI assistant dashboard writer are highly intuitive. Saved us 10+ hours of support spreadsheets work."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">United States</span>
+                <span class="review-date">Jul 2, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 4: Ghana -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">AS</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Ama Serwaa</span>
+                    <span class="review-card-handle">@ama_serwaa</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Accepting local cards and mobile money checkouts has never been this quick. Settlements are completed without lag."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">Ghana</span>
+                <span class="review-date">Jun 28, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 5: Kenya / Global -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">WM</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Wanjiku Maina</span>
+                    <span class="review-card-handle">@wanjiku_maina</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Nile makes it simple to run an international retail agency. Dynamic pricing configuration is incredibly clean."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">Kenya</span>
+                <span class="review-date">Jun 25, 2026</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Sliding Right -->
+        <div class="reviews-ticker-row ticker-row-right">
+          <div class="reviews-ticker-inner">
+            <!-- Review 6: United States -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">MV</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Michael Vance</span>
+                    <span class="review-card-handle">@vance_leather</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Custom domain registration and auto-generated XML sitemaps made Google indexing a breeze. Nile is state of the art."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">United States</span>
+                <span class="review-date">Jul 7, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 7: Ghana -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">KM</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Kofi Mensah</span>
+                    <span class="review-card-handle">@kofi_mensah</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Print custom logistics courier labels directly from the orders tab. Nile completely simplifies shipping logistics."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">Ghana</span>
+                <span class="review-date">Jul 4, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 8: Kenya -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">DO</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">David Ochieng</span>
+                    <span class="review-card-handle">@ochieng_studios</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "The web builder UI design is simple and elegant. Stripe-level aesthetics built inside our regional market space."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">Kenya</span>
+                <span class="review-date">Jun 30, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 9: Nigeria -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">TO</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Tunde Oke</span>
+                    <span class="review-card-handle">@tunde_oke</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Transitioning from custom React frameworks to Nile cuts operational overhead. Checkout routing is extremely secure."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">Nigeria</span>
+                <span class="review-date">Jun 27, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 10: United Kingdom -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">ER</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Emily Rose</span>
+                    <span class="review-card-handle">@emily_rose_co</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Clean responsive cart transitions increased conversions rate instantly by 35% on mobile devices checkouts."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">United Kingdom</span>
+                <span class="review-date">Jun 22, 2026</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Duplicate list for seamless infinite loop -->
+          <div class="reviews-ticker-inner">
+            <!-- Review 6: United States -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">MV</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Michael Vance</span>
+                    <span class="review-card-handle">@vance_leather</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Custom domain registration and auto-generated XML sitemaps made Google indexing a breeze. Nile is state of the art."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">United States</span>
+                <span class="review-date">Jul 7, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 7: Ghana -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">KM</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Kofi Mensah</span>
+                    <span class="review-card-handle">@kofi_mensah</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Print custom logistics courier labels directly from the orders tab. Nile completely simplifies shipping logistics."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">Ghana</span>
+                <span class="review-date">Jul 4, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 8: Kenya -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">DO</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">David Ochieng</span>
+                    <span class="review-card-handle">@ochieng_studios</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "The web builder UI design is simple and elegant. Stripe-level aesthetics built inside our regional market space."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">Kenya</span>
+                <span class="review-date">Jun 30, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 9: Nigeria -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">TO</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Tunde Oke</span>
+                    <span class="review-card-handle">@tunde_oke</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Transitioning from custom React frameworks to Nile cuts operational overhead. Checkout routing is extremely secure."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">Nigeria</span>
+                <span class="review-date">Jun 27, 2026</span>
+              </div>
+            </div>
+
+            <!-- Review 10: United Kingdom -->
+            <div class="review-twitter-card">
+              <div class="review-card-header">
+                <div class="review-card-user">
+                  <div class="review-card-avatar">ER</div>
+                  <div class="review-card-info">
+                    <span class="review-card-name">Emily Rose</span>
+                    <span class="review-card-handle">@emily_rose_co</span>
+                  </div>
+                </div>
+                <span class="review-twitter-logo">𝕏</span>
+              </div>
+              <p class="review-card-body">
+                "Clean responsive cart transitions increased conversions rate instantly by 35% on mobile devices checkouts."
+              </p>
+              <div class="review-card-footer">
+                <span class="review-region-tag">United Kingdom</span>
+                <span class="review-date">Jun 22, 2026</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Homepage Pricing Section -->
+    <section class="pricing-summary-section scroll-reveal" style="border-top: 1px solid #F1F5F9; padding: 6rem 3rem; background: var(--bg-secondary); text-align: center;">
+      <div style="max-width: 1200px; margin: 0 auto;">
+        <span class="story-badge">Pricing Plans</span>
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-primary);">Simple, transparent pricing.</h2>
+        <p style="max-width: 600px; margin: 0 auto 3rem auto; color: var(--text-secondary); line-height: 1.6;">
+          Choose the right plan to launch and scale your business on Nile. Billed for 3 months.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; text-align: left; max-width: 1100px; margin: 0 auto;">
+          <!-- Starter -->
+          <div class="pricing-card" style="background: white; padding: 2.25rem; border: 1px solid #E2E8F0; border-radius: var(--border-radius-lg); display: flex; flex-direction: column; box-shadow: var(--card-shadow);">
+            <div style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">Starter</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); min-height: 45px; margin-bottom: 1.5rem; line-height: 1.5;">
+              Best for new brands starting online quickly.
+            </p>
+            <div style="font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+              <span class="region-specific ng-only">₦10,000</span>
+              <span class="region-specific gh-only">GH₵150</span>
+              <span class="region-specific uk-only">£12</span>
+              <span class="region-specific us-only">$15</span>
+              <span class="region-specific global-only">$15</span>
+              <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-secondary);">/ 3 Mos</span>
+            </div>
+            <a href="https://app.nile.ng" class="btn btn-outline" style="text-align: center; margin-top: auto; width: 100%;">Get Started</a>
+          </div>
+
+          <!-- Growth -->
+          <div class="pricing-card highlighted" style="background: white; padding: 2.25rem; border: 2px solid var(--accent-emerald); border-radius: var(--border-radius-lg); display: flex; flex-direction: column; position: relative; box-shadow: var(--card-shadow);">
+            <div style="position: absolute; top: -12px; right: 20px; background: var(--accent-emerald); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 9999px; text-transform: uppercase;">Most Popular</div>
+            <div style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">Growth</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); min-height: 45px; margin-bottom: 1.5rem; line-height: 1.5;">
+              Perfect for growing brands needing variants and custom domains.
+            </p>
+            <div style="font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+              <span class="region-specific ng-only">₦15,000</span>
+              <span class="region-specific gh-only">GH₵220</span>
+              <span class="region-specific uk-only">£18</span>
+              <span class="region-specific us-only">$22</span>
+              <span class="region-specific global-only">$22</span>
+              <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-secondary);">/ 3 Mos</span>
+            </div>
+            <a href="https://app.nile.ng" class="btn btn-primary" style="text-align: center; margin-top: auto; width: 100%;">Get Started</a>
+          </div>
+
+          <!-- Premium -->
+          <div class="pricing-card" style="background: white; padding: 2.25rem; border: 1px solid #E2E8F0; border-radius: var(--border-radius-lg); display: flex; flex-direction: column; box-shadow: var(--card-shadow);">
+            <div style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">Premium</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); min-height: 45px; margin-bottom: 1.5rem; line-height: 1.5;">
+              Built for high-volume merchants and wholesalers.
+            </p>
+            <div style="font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+              <span class="region-specific ng-only">₦25,000</span>
+              <span class="region-specific gh-only">GH₵370</span>
+              <span class="region-specific uk-only">£29</span>
+              <span class="region-specific us-only">$39</span>
+              <span class="region-specific global-only">$39</span>
+              <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-secondary);">/ 3 Mos</span>
+            </div>
+            <a href="https://app.nile.ng" class="btn btn-outline" style="text-align: center; margin-top: auto; width: 100%;">Get Started</a>
+          </div>
+        </div>
+
+        <div style="margin-top: 3rem;">
+          <a href="pricing.html" style="color: var(--accent-emerald); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+            Compare all plans and features <span>→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta scroll-reveal">
+      <div class="cta-container">
+        <div class="cta-content">
+          <h2>The next business people remember could be yours.</h2>
+          <p>Every successful company started with an idea. Start building yours today with Nile.</p>
+          
+          <div class="cta-actions" style="margin-bottom: 2.5rem;">
+            <a href="https://app.nile.ng" class="btn btn-emerald">Start Building</a>
+          </div>
+
+          <div class="app-downloads-section" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; text-align: left;">
+            <h4 style="color: white; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem;">For managing your store:</h4>
+            <p style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 1.25rem;">Download the Nile app for iOS or Android, or access the web console.</p>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+              <a href="https://apps.apple.com/us/app/nile-for-business/id6778121842" target="_blank" class="btn btn-outline" style="color: white; border-color: rgba(255,255,255,0.2); padding: 0.6rem 1rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.21.67-2.93 1.49-.62.69-1.16 1.84-1.01 2.96 1.12.09 2.27-.56 2.95-1.39"/></svg>
+                iOS App
+              </a>
+              <a href="https://play.google.com/store/apps/details?id=com.app.nileapp" target="_blank" class="btn btn-outline" style="color: white; border-color: rgba(255,255,255,0.2); padding: 0.6rem 1rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M3.609 1.814L13.783 12 3.609 22.186c-.18.18-.32.1-.32-.15V1.964c0-.25.14-.33.32-.15zm10.89 10.89l2.87 2.87-11.23 6.32 8.36-9.19zm3.5-3.5l3.22 1.81c.5.28.5.74 0 1.02l-3.22 1.81-2.87-2.87 2.87-2.87zm-2.87-2.87l-8.36-9.19 11.23 6.32-2.87 2.87zm-2.87-2.87l-8.36-9.19 11.23 6.32-2.87 2.87z"/></svg>
+                Android App
+              </a>
+              <a href="http://app.nile.ng" target="_blank" class="btn btn-outline" style="color: white; border-color: rgba(255,255,255,0.2); padding: 0.6rem 1rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                Web Console
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="cta-photo-wrapper">
+          <img src="/src/assets/logistics_truck.jpg" alt="Two packers loading Nile logistics truck with boxes" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h4 style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.75rem; line-height: 1.2;">Build the business they'll remember.</h4>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.5;">Unified commerce operating system for global brands.</p>
+          <div class="footer-socials" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
+            <a href="https://www.instagram.com/getnile.co/" target="_blank" class="social-link" title="Instagram" style="color: var(--text-secondary); transition: color 0.2s ease, transform 0.2s ease; display: inline-flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.665-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@thewinnerbanjo" target="_blank" class="social-link" title="TikTok" style="color: var(--text-secondary); transition: color 0.2s ease, transform 0.2s ease; display: inline-flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.18.94 1.13 2.27 1.9 3.73 2.14v3.92c-1.63-.03-3.22-.53-4.57-1.45-.48-.33-.92-.72-1.3-1.16v6.97c.07 2.39-1.12 4.67-3.15 5.92-2.02 1.25-4.58 1.43-6.75.46-2.18-.97-3.72-3.08-4.04-5.46-.35-2.58.74-5.18 2.85-6.75 2.1-1.57 4.96-1.8 7.3-.61v4.06c-1.33-.87-3.1-.73-4.27.35-.91.85-1.28 2.14-1 3.35.29 1.21 1.23 2.16 2.44 2.45 1.22.28 2.52-.08 3.38-.99.55-.58.85-1.35.84-2.14V.02z"/></svg>
+            </a>
+          </div>
+        </div>
+        
+        <div class="footer-col">
+          <h5>Platform</h5>
+          <ul class="footer-links">
+            <li><a href="solutions.html">Build</a></li>
+            <li><a href="solutions.html">Sell</a></li>
+            <li><a href="solutions.html">Get Paid</a></li>
+            <li><a href="solutions.html">Ship</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="team.html">Our Team</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="security.html">Security</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Resources</h5>
+          <ul class="footer-links">
+            <li><a href="samples.html">Live Store Samples</a></li>
+            <li><a href="knowledge.html">Knowledge Base</a></li>
+            <li><a href="ai.html">AI Features</a></li>
+            <li><a href="knowledge.html#faq">FAQ</a></li>
+            <li><a href="developers.html">Developers</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Legal</h5>
+          <ul class="footer-links">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="cookies.html">Cookie Policy</a></li>
+            <li><a href="refund-policy.html">Refund Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Compliance</h5>
+          <ul class="footer-links">
+            <li><a href="dpa.html">Data Processing</a></li>
+            <li><a href="merchant-agreement.html">Merchant Agreement</a></li>
+            <li><a href="sla.html">SLA Commitment</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col-news">
+          <h5 style="margin-bottom: 0.5rem;">Nile Dispatch</h5>
+          <p style="font-size: 0.75rem; color: var(--text-secondary);">Modern commerce insights for digital founders.</p>
+          <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed to Nile Dispatch!'); this.reset();">
+            <input type="email" placeholder="you@example.com" required />
+            <button type="submit" class="btn btn-emerald">Join</button>
+          </form>
+        </div>
+      </div>
+      
+            <div class="footer-offices" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2.5rem; padding: 2.5rem 0; border-top: 1px solid #f1f5f9; margin-bottom: 1rem;">
+        <div class="footer-office-col">
+          <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">Nigeria</h5>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">20 Oyinbogbola Street, Ipaja<br/>Lagos, Nigeria</p>
+        </div>
+        <div class="footer-office-col">
+          <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">United Kingdom</h5>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">Work.Life Soho<br/>Waverley House, 9 Noel Street<br/>Soho, London, W1F 8GQ<br/>United Kingdom</p>
+        </div>
+        <div class="footer-office-col">
+          <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">United States</h5>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">The Mill Space<br/>221 West 10th Street, 3rd & 4th Floor<br/>Wilmington, Delaware, DE 19801<br/>United States</p>
+        </div>
+        <div class="footer-office-col">
+          <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">Support</h5>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;"><a href="mailto:business@nile.ng" style="color: var(--accent-emerald); text-decoration: none; font-weight: 500;">business@nile.ng</a></p>
+        </div>
+      </div>
+      
+      <!-- Gigantic Typography Logo -->
+      <div class="footer-giant-logo">Nile</div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Nile Technologies. All rights reserved. Built for ambitious businesses.</span>
+        <div class="footer-status">
+          <div class="status-dot"></div>
+          <span>All Nile Systems Operational</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Setup / Plan Selection Modal -->
+    <div id="setup-modal-container" class="setup-modal-container">
+      <div class="welcome-modal-backdrop" onclick="document.getElementById('setup-modal-container').classList.remove('active'); document.body.classList.remove('modal-open');"></div>
+      <div class="setup-modal">
+        <button id="setup-modal-close" class="setup-modal-close">✕</button>
+        <div class="setup-modal-header">
+          <h3>Set Up Your Store</h3>
+          <p>Please enter your details to initialize your website instance on the Nile Operating System.</p>
+        </div>
+        
+        <form id="setup-form" class="setup-form">
+          <div class="form-group">
+            <label for="setup-email">Email Address</label>
+            <input type="email" id="setup-email" placeholder="founder@yourbrand.com" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="setup-plan-select">Selected Plan / Package</label>
+            <select id="setup-plan-select" required>
+              <optgroup label="Nile Platform Plans">
+                <option value="starter">Starter Plan</option>
+                <option value="growth">Growth Plan (Recommended)</option>
+                <option value="premium">Premium Plan</option>
+                <option value="enterprise">Enterprise Custom</option>
+              </optgroup>
+              <optgroup label="Nile Managed Setup (3 Mos)">
+                <option value="starter-setup">Nile Starter (₦10,000)</option>
+                <option value="growth-setup" selected>Nile Growth (₦15,000)</option>
+                <option value="premium-setup">Nile Premium (₦25,000)</option>
+              </optgroup>
+            </select>
+          </div>
+          
+          <button type="submit" class="btn btn-emerald" style="width: 100%; margin-top: 1rem;">Confirm & Setup Store</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main JS entrypoint -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

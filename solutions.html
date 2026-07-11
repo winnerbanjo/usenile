@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Platform Solutions — Nile 3.0</title>
+    <meta name="description" content="Explore Nile's advanced commerce solutions: from storefront designers and payment routing systems to shipping label generators and automated stock managers." />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22%2302663c%22/></svg>" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="region-global">
+
+        <!-- Welcome Modal (Personalization Entry Experience) -->
+    <div id="welcome-modal-container" class="welcome-modal-container">
+      <div class="welcome-modal-backdrop"></div>
+      <div class="welcome-modal">
+        <h2>Welcome to Nile.</h2>
+        <p>Let's personalize your experience. Choose where your business is based to configure pricing, currencies, and gateways.</p>
+        <div class="welcome-modal-options">
+          <button class="modal-opt-btn" data-region="ng">
+            <span class="flag-name">Nigeria</span>
+            <span class="arrow">→</span>
+          </button>
+          <button class="modal-opt-btn" data-region="uk">
+            <span class="flag-name">UK</span>
+            <span class="arrow">→</span>
+          </button>
+          <button class="modal-opt-btn" data-region="us">
+            <span class="flag-name">US</span>
+            <span class="arrow">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav id="main-nav">
+      <a href="index.html" class="nav-logo">
+        <img src="/src/assets/nile_logo.png" alt="Nile Logo" height="32" style="margin-right: 0.5rem;" />
+      </a>
+      
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <ul class="nav-links">
+        <!-- Dropdown 1: Platform -->
+        <li class="nav-item-dropdown">
+          <a href="#" class="nav-trigger-link">Platform <span>▾</span></a>
+          <div class="nav-dropdown-panel grid-2-col">
+            <div class="dropdown-group">
+              <span class="dropdown-group-title">PRODUCTS</span>
+              <a href="solutions.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Nile Retail</span>
+                  <span class="dropdown-item-desc">Create high-performance stores</span>
+                </div>
+              </a>
+              <a href="solutions.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><path d="M1 10h22"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Nile Payments</span>
+                  <span class="dropdown-item-desc">Accept localized payment methods</span>
+                </div>
+              </a>
+              <a href="solutions.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Nile Shipping</span>
+                  <span class="dropdown-item-desc">Generate labels & tracking maps</span>
+                </div>
+              </a>
+            </div>
+            
+            <div class="dropdown-group bg-muted">
+              <span class="dropdown-group-title">INTELLIGENCE</span>
+              <a href="ai.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Nile AI Assistant</span>
+                  <span class="dropdown-item-desc">Write listings & support auto-replies</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <!-- Dropdown 2: Solutions -->
+        <li class="nav-item-dropdown">
+          <a href="#" class="nav-trigger-link">Solutions <span>▾</span></a>
+          <div class="nav-dropdown-panel">
+            <div class="dropdown-group">
+              <span class="dropdown-group-title">BY INDUSTRY</span>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; min-width: 320px;">
+                <a href="solutions.html#industries" class="dropdown-item-simple">Fashion</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Beauty</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Food & Services</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Electronics</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Wholesale</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Services</a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Dropdown 3: Resources -->
+        <li class="nav-item-dropdown">
+          <a href="#" class="nav-trigger-link">Resources <span>▾</span></a>
+          <div class="nav-dropdown-panel grid-2-col">
+            <div class="dropdown-group">
+              <span class="dropdown-group-title">COMPANY</span>
+              <a href="about.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5A2.5 2.5 0 006.5 22H20M4 19.5V3.5A2.5 2.5 0 016.5 1M20 3.5V17H6.5"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">About Us</span>
+                  <span class="dropdown-item-desc">Our mission, values & leadership</span>
+                </div>
+              </a>
+              <a href="team.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Our Team</span>
+                  <span class="dropdown-item-desc">Meet the builders of commerce OS</span>
+                </div>
+              </a>
+              <a href="careers.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Careers</span>
+                  <span class="dropdown-item-desc">Join the engineering & product team</span>
+                </div>
+              </a>
+              <a href="security.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Security First</span>
+                  <span class="dropdown-item-desc">Safeguards and encryption models</span>
+                </div>
+              </a>
+            </div>
+            
+            <div class="dropdown-group bg-muted">
+              <span class="dropdown-group-title">SUPPORT</span>
+              <a href="knowledge.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3m0 4h.01"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Knowledge Base</span>
+                  <span class="dropdown-item-desc">Tutorials, guides, and FAQs</span>
+                </div>
+              </a>
+              <a href="contact.html" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <svg class="nav-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2" ry="2"/><path d="M3 6l9 6 9-6"/></svg>
+                </div>
+                <div>
+                  <span class="dropdown-item-title">Contact Sales</span>
+                  <span class="dropdown-item-desc">Talk to our platform managers</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <li><a href="developers.html">Developers</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+      </ul>
+      
+      <div class="nav-actions">
+        <button class="region-badge">Region <span style="font-size: 0.7rem; margin-left: 0.25rem;">▾</span></button>
+        <a href="https://app.nile.ng" target="_blank" class="btn-link">Log In</a>
+        <a href="pricing.html" class="btn btn-primary">Start Building</a>
+      </div>
+    </nav>
+
+    <!-- Subpage Hero -->
+    <header class="solutions-header-hero scroll-reveal">
+      <span class="story-badge">Nile Platform Architecture</span>
+      <h1>Everything you need to launch and scale.</h1>
+      <p class="supporting-text">No scattered integrations. No fragile API bridges. Nile brings your store builder, payment routers, inventory logs, and shipping label suites into one unified operating system.</p>
+    </header>
+
+    <!-- Detailed Stories -->
+    <main>
+      
+      <!-- Story 1: BUILD -->
+      <section class="story-section scroll-reveal" style="border-top: 1px solid #F1F5F9;">
+        <div class="story-content">
+          <span class="story-badge">Build</span>
+          <h2>Create a brand people trust.</h2>
+          <p>Launch high-performance, fast-loading storefronts with custom domains and built-in SEO. Handcrafted premium themes designed to convert mobile visitors instantly without coding.</p>
+          <ul class="story-features">
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Mobile-first architecture
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Premium custom domains
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              SEO tags & sitemaps automated
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Ultra-fast page response
+            </li>
+          </ul>
+        </div>
+        <div class="story-visual">
+          <img src="/src/assets/build_trust.jpg" alt="Person looking at phone surrounded by packages" style="object-position: center 30%;" />
+        </div>
+      </section>
+
+      <!-- Story 2: SELL -->
+      <section class="story-section reverse scroll-reveal">
+        <div class="story-content">
+          <span class="story-badge">Sell</span>
+          <h2>Turn visitors into customers.</h2>
+          <p>Increase purchase sizes automatically. Nile provides built-in bundles, volume discounts, sleek checkout upsells, and automatic abandoned cart recovery emails.</p>
+          <ul class="story-features">
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Abandoned cart triggers
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              One-click product bundles
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Volume-based discounts
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Post-purchase upsells
+            </li>
+          </ul>
+        </div>
+        <div class="story-visual">
+          <div style="background-color: var(--bg-secondary); width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem;">
+            <div style="background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1.5rem; width: 100%; max-width: 320px; box-shadow: var(--card-shadow);">
+              <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-emerald); margin-bottom: 0.5rem;">🔥 BUNDLE & SAVE ACTIVE</div>
+              <div style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem;">Complete Studio Set</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">Buy Hoodies + Pants together and get 15% off.</div>
+              <button class="btn btn-emerald" style="width: 100%; font-size: 0.8rem; padding: 0.5rem;">Apply discount bundle</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Story 3: GET PAID -->
+      <section class="story-section scroll-reveal">
+        <div class="story-content">
+          <span class="story-badge">Get Paid</span>
+          <h2>Money should never slow your business down.</h2>
+          <p>Accept payments securely using trusted payment providers. As you update your region, your checkout dynamic options automatically adjust to localized merchant payment setups.</p>
+          <ul class="story-features">
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Localized gateways
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Instant SMS/Email invoices
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Receipts sent instantly
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              99.99% processing uptime
+            </li>
+          </ul>
+        </div>
+        <div class="story-visual" style="display: flex; align-items: center; justify-content: center; background-color: var(--bg-secondary);">
+          <!-- Payment Simulator Component -->
+          <div class="payment-sim-card">
+            <div class="payment-sim-header">
+              <span class="payment-sim-title">Secure Nile Checkout</span>
+              <span id="payment-sim-gateway" class="payment-gateway-tag">Stripe Active</span>
+            </div>
+            
+            <div id="payment-sim-amount" class="payment-sim-amount">$39.00</div>
+            
+            <div id="payment-sim-form" class="payment-sim-options">
+              <div id="payment-sim-methods" style="display: flex; flex-direction: column; gap: 0.4rem;">
+                <!-- Methods loaded by payment-sim.js -->
+              </div>
+              <button id="payment-sim-btn" class="payment-sim-btn">Complete Payment</button>
+            </div>
+            
+            <div id="payment-sim-success" class="payment-sim-success">
+              <div class="success-icon-ring">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">Payment Completed!</div>
+              <div id="payment-sim-success-msg" style="font-size: 0.7rem; color: var(--text-secondary);">Receipt dispatched. Settled instantly.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Story 4: MANAGE -->
+      <section class="story-section reverse scroll-reveal">
+        <div class="story-content">
+          <span class="story-badge">Manage</span>
+          <h2>One dashboard. Every answer.</h2>
+          <p>Say goodbye to spreadsheets. Track inventory levels, review sales histories, manage customer communication threads, and fulfill orders all from one unified dashboard.</p>
+          <ul class="story-features">
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Inventory live alerts
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Multi-channel inbox logs
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Fulfillment automation
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Revenue growth analysis
+            </li>
+          </ul>
+        </div>
+        <div class="story-visual">
+          <img src="/src/assets/manage_dashboard.png" alt="Nile Unified Dashboard Interface" />
+        </div>
+      </section>
+
+      <!-- Story 5: SHIP -->
+      <section class="story-section scroll-reveal">
+        <div class="story-content">
+          <span class="story-badge">Ship</span>
+          <h2>From checkout to doorstep.</h2>
+          <p>Generate domestic and international shipping labels automatically. Provide customers with real-time transit visual progression updates on local map integrations.</p>
+          <ul class="story-features">
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Auto-generate labels
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Local carrier API routing
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Automatic tracking emails
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Real-time transit updates
+            </li>
+          </ul>
+        </div>
+        <div class="story-visual">
+          <img src="/src/assets/label_printer.jpg" alt="Thermal printer spitting label sheets" />
+        </div>
+      </section>
+
+      <!-- Story 6: GROW -->
+      <section class="story-section reverse scroll-reveal">
+        <div class="story-content">
+          <span class="story-badge">Grow</span>
+          <h2>Built for your first customer. Ready for your millionth.</h2>
+          <p>Scale without migrating. Nile supports your growth from packing orders in a bedroom to running high-volume international warehouses with complex teams.</p>
+          <ul class="story-features">
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Multi-store consolidation
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Advanced staff roles
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              High API request thresholds
+            </li>
+            <li class="story-feature-item">
+              <svg width="16" height="16" fill="none" stroke="var(--accent-emerald)" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+              Global fulfillment channels
+            </li>
+          </ul>
+        </div>
+        <div class="story-visual">
+          <img src="/src/assets/grow_scale.jpg" alt="Woman holding long shipping receipts" style="object-position: center 30%;" />
+        </div>
+      </section>
+
+      <!-- NEW SECTION: INDUSTRIES -->
+      <section id="industries" class="scroll-reveal" style="border-top: 1px solid #F1F5F9; padding: 6rem 0; text-align: center;">
+        <span class="story-badge">Built for every industry</span>
+        <h2 style="font-size: 2.5rem; margin-bottom: 3rem;">Tailored features for your market.</h2>
+        <div class="subpage-portals" style="padding: 0; max-width: 1200px; margin: 0 auto;">
+          <div class="portal-card" style="padding: 2rem; cursor: default;">
+            <div class="portal-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
+            </div>
+            <h3>Fashion</h3>
+            <p>Launch collections, manage variants (sizes, colors), track visual models, and sell everywhere.</p>
+          </div>
+          <div class="portal-card" style="padding: 2rem; cursor: default;">
+            <div class="portal-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707"/></svg>
+            </div>
+            <h3>Beauty</h3>
+            <p>Manage product inventories, configure recurring orders, and build lasting customer relationships.</p>
+          </div>
+          <div class="portal-card" style="padding: 2rem; cursor: default;">
+            <div class="portal-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4zM6 1v3M10 1v3M14 1v3"/></svg>
+            </div>
+            <h3>Food & Restaurants</h3>
+            <p>Accept online ordering schedules, manage deliveries, and streamline kitchen receipt printing.</p>
+          </div>
+          <div class="portal-card" style="padding: 2rem; cursor: default;">
+            <div class="portal-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <h3>Electronics</h3>
+            <p>Track large catalogs, manage multiple warehouse stock listings, and verify warranty serial numbers.</p>
+          </div>
+          <div class="portal-card" style="padding: 2rem; cursor: default;">
+            <div class="portal-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <h3>Wholesale</h3>
+            <p>Sell in bulk, set volume-based tier discounts, and create custom customer groups.</p>
+          </div>
+          <div class="portal-card" style="padding: 2rem; cursor: default;">
+            <div class="portal-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <h3>Services</h3>
+            <p>Accept digital appointments, capture customer booking deposits, and manage invoice statements.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Global Commerce Map -->
+    <section class="global-commerce scroll-reveal">
+      <h2>Built locally. Sell globally.</h2>
+      <p class="supporting-text">Routing money, syncing inventory, and dispatching shipping labels across borders in seconds. Nile handles international localization automatically.</p>
+      
+      <div class="map-container">
+        <svg id="world-map" class="world-map-svg" viewBox="0 0 1000 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="map-line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#02663c" stop-opacity="0"/>
+              <stop offset="50%" stop-color="#02663c" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#0E7490" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          
+          <path d="M120 120 L240 100 L300 200 L250 280 L280 380 L200 480 L180 480 L210 380 L170 340 L100 240 Z" fill="rgba(0,0,0,0.01)" stroke="rgba(0,0,0,0.03)" stroke-width="1.5" />
+          <path d="M420 100 L550 80 L750 120 L900 150 L840 280 L750 350 L780 420 L720 440 L600 350 L500 450 L460 380 L440 280 L400 200 Z" fill="rgba(0,0,0,0.01)" stroke="rgba(0,0,0,0.03)" stroke-width="1.5" />
+        </svg>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h4 style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.75rem; line-height: 1.2;">Build the business they'll remember.</h4>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.5;">Unified commerce operating system for global brands.</p>
+          <div class="footer-socials" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
+            <a href="https://www.instagram.com/getnile.co/" target="_blank" class="social-link" title="Instagram" style="color: var(--text-secondary); transition: color 0.2s ease, transform 0.2s ease; display: inline-flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.665-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@thewinnerbanjo" target="_blank" class="social-link" title="TikTok" style="color: var(--text-secondary); transition: color 0.2s ease, transform 0.2s ease; display: inline-flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.18.94 1.13 2.27 1.9 3.73 2.14v3.92c-1.63-.03-3.22-.53-4.57-1.45-.48-.33-.92-.72-1.3-1.16v6.97c.07 2.39-1.12 4.67-3.15 5.92-2.02 1.25-4.58 1.43-6.75.46-2.18-.97-3.72-3.08-4.04-5.46-.35-2.58.74-5.18 2.85-6.75 2.1-1.57 4.96-1.8 7.3-.61v4.06c-1.33-.87-3.1-.73-4.27.35-.91.85-1.28 2.14-1 3.35.29 1.21 1.23 2.16 2.44 2.45 1.22.28 2.52-.08 3.38-.99.55-.58.85-1.35.84-2.14V.02z"/></svg>
+            </a>
+          </div>
+        </div>
+        
+        <div class="footer-col">
+          <h5>Platform</h5>
+          <ul class="footer-links">
+            <li><a href="solutions.html">Build</a></li>
+            <li><a href="solutions.html">Sell</a></li>
+            <li><a href="solutions.html">Get Paid</a></li>
+            <li><a href="solutions.html">Ship</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="team.html">Our Team</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="security.html">Security</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Resources</h5>
+          <ul class="footer-links">
+            <li><a href="samples.html">Live Store Samples</a></li>
+            <li><a href="knowledge.html">Knowledge Base</a></li>
+            <li><a href="ai.html">AI Features</a></li>
+            <li><a href="knowledge.html#faq">FAQ</a></li>
+            <li><a href="developers.html">Developers</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Legal</h5>
+          <ul class="footer-links">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="cookies.html">Cookie Policy</a></li>
+            <li><a href="refund-policy.html">Refund Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Compliance</h5>
+          <ul class="footer-links">
+            <li><a href="dpa.html">Data Processing</a></li>
+            <li><a href="merchant-agreement.html">Merchant Agreement</a></li>
+            <li><a href="sla.html">SLA Commitment</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col-news">
+          <h5 style="margin-bottom: 0.5rem;">Nile Dispatch</h5>
+          <p style="font-size: 0.75rem; color: var(--text-secondary);">Modern commerce insights for digital founders.</p>
+          <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed to Nile Dispatch!'); this.reset();">
+            <input type="email" placeholder="you@example.com" required />
+            <button type="submit" class="btn btn-emerald">Join</button>
+          </form>
+        </div>
+      </div>
+      
+            <div class="footer-offices" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2.5rem; padding: 2.5rem 0; border-top: 1px solid #f1f5f9; margin-bottom: 1rem;">
+        <div class="footer-office-col">
+          <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">Nigeria</h5>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">20 Oyinbogbola Street, Ipaja<br/>Lagos, Nigeria</p>
+        </div>
+        <div class="footer-office-col">
+          <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">United Kingdom</h5>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">Work.Life Soho<br/>Waverley House, 9 Noel Street<br/>Soho, London, W1F 8GQ<br/>United Kingdom</p>
+        </div>
+        <div class="footer-office-col">
+          <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">United States</h5>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">The Mill Space<br/>221 West 10th Street, 3rd & 4th Floor<br/>Wilmington, Delaware, DE 19801<br/>United States</p>
+        </div>
+        <div class="footer-office-col">
+          <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">Support</h5>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;"><a href="mailto:business@nile.ng" style="color: var(--accent-emerald); text-decoration: none; font-weight: 500;">business@nile.ng</a></p>
+        </div>
+      </div>
+      
+      <!-- Gigantic Typography Logo -->
+      <div class="footer-giant-logo">Nile</div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Nile Technologies. All rights reserved. Built for ambitious businesses.</span>
+        <div class="footer-status">
+          <div class="status-dot"></div>
+          <span>All Nile Systems Operational</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Setup / Plan Selection Modal -->
+    <div id="setup-modal-container" class="setup-modal-container">
+      <div class="welcome-modal-backdrop" onclick="document.getElementById('setup-modal-container').classList.remove('active'); document.body.classList.remove('modal-open');"></div>
+      <div class="setup-modal">
+        <button id="setup-modal-close" class="setup-modal-close">✕</button>
+        <div class="setup-modal-header">
+          <h3>Set Up Your Store</h3>
+          <p>Please enter your details to initialize your website instance on the Nile Operating System.</p>
+        </div>
+        
+        <form id="setup-form" class="setup-form">
+          <div class="form-group">
+            <label for="setup-email">Email Address</label>
+            <input type="email" id="setup-email" placeholder="founder@yourbrand.com" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="setup-plan-select">Selected Plan / Package</label>
+            <select id="setup-plan-select" required>
+              <optgroup label="Nile Platform Plans">
+                <option value="starter">Starter Plan</option>
+                <option value="growth">Growth Plan (Recommended)</option>
+                <option value="premium">Premium Plan</option>
+                <option value="enterprise">Enterprise Custom</option>
+              </optgroup>
+              <optgroup label="Nile Managed Setup (3 Mos)">
+                <option value="starter-setup">Nile Starter (₦10,000)</option>
+                <option value="growth-setup" selected>Nile Growth (₦15,000)</option>
+                <option value="premium-setup">Nile Premium (₦25,000)</option>
+              </optgroup>
+            </select>
+          </div>
+          
+          <button type="submit" class="btn btn-emerald" style="width: 100%; margin-top: 1rem;">Confirm & Setup Store</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main JS entrypoint -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
