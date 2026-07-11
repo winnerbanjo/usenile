@@ -2742,19 +2742,34 @@ body.region-global span.global-only { display: inline !important; }
   }
   
   .nav-dropdown-panel {
-    position: relative;
-    top: 0;
-    left: 0;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    box-shadow: none;
-    border: none;
-    padding: 0.5rem 0 0 1rem;
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0.5rem 0 0 1rem !important;
     grid-template-columns: 1fr !important;
     display: none;
     flex-direction: column;
     gap: 1rem;
+  }
+  
+  .nav-dropdown-panel * {
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .nav-trigger-link span {
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .nav-item-dropdown.expanded .nav-trigger-link span {
+    transform: rotate(180deg) !important;
   }
   
   /* Reset background of dropdown groups to avoid floating box look */
