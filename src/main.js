@@ -405,14 +405,17 @@ function initHeroCarousel() {
 }
 
 
-// Mobile Menu Toggle
+// Mobile Menu Toggle and Dropdowns
 document.addEventListener('DOMContentLoaded', () => {
   const mobileBtn = document.getElementById('mobile-menu-btn');
   const navLinks = document.querySelector('.nav-links');
+  const navActions = document.querySelector('.nav-actions');
+  const dropdownTriggers = document.querySelectorAll('.nav-trigger-link');
   
   if (mobileBtn && navLinks) {
     mobileBtn.addEventListener('click', () => {
       navLinks.classList.toggle('mobile-open');
+      if (navActions) navActions.classList.toggle('mobile-open');
       document.body.classList.toggle('no-scroll');
       
       // Toggle SVG Icon (Hamburger to Close)
@@ -424,4 +427,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Handle dropdown opening on mobile
+  dropdownTriggers.forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        const parentLi = trigger.closest('.nav-item-dropdown');
+        
+        // Close others
+        document.querySelectorAll('.nav-item-dropdown.expanded').forEach(item => {
+          if (item !== parentLi) item.classList.remove('expanded');
+        });
+        
+        parentLi.classList.toggle('expanded');
+      }
+    });
+  });
 });

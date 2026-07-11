@@ -2776,9 +2776,12 @@ body.region-global span.global-only { display: inline !important; }
     display: none; /* Hide submenu by default on mobile if we want, or just show them natively */
   }
   
-  .nav-item-dropdown:hover .nav-dropdown-panel,
-  .nav-item-dropdown:active .nav-dropdown-panel {
-    display: flex; /* Show them implicitly in the open menu */
+  .nav-item-dropdown.expanded .nav-dropdown-panel {
+    display: flex;
+  }
+  
+  .nav-trigger-link {
+    cursor: pointer;
   }
   
   .dropdown-group-title {
