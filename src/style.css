@@ -2705,6 +2705,13 @@ body.region-global span.global-only { display: inline !important; }
 
   .mobile-menu-btn {
     display: block;
+    position: relative;
+    z-index: 1001;
+  }
+
+  .nav-logo {
+    position: relative;
+    z-index: 1001;
   }
   
   .nav-links {
@@ -2713,18 +2720,24 @@ body.region-global span.global-only { display: inline !important; }
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     background-color: #ffffff;
-    z-index: 999;
-    padding: 5rem 2rem 2rem;
-    gap: 2rem !important;
+    z-index: 1000;
+    padding: 5rem 1.5rem 2rem;
+    gap: 1.5rem !important;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
-    align-items: flex-start;
+    overflow-x: hidden;
+    align-items: stretch;
+  }
+
+  .nav-links > li {
+    width: 100%;
+    display: block;
   }
   
   .nav-links.mobile-open {
