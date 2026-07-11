@@ -2627,20 +2627,7 @@ body.region-global span.global-only { display: inline !important; }
 }
 
 @media (max-width: 768px) {
-  /* Fix navbar to allow scrolling instead of hiding links */
-  nav {
-    padding: 0 1rem;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    white-space: nowrap;
-    gap: 1.5rem;
-    justify-content: flex-start;
-  }
-  .nav-links {
-    display: flex; /* Override display: none */
-    gap: 1.25rem;
-    margin-right: 1.5rem;
-  }
+
   
   /* Fix Problem section map to avoid overflow */
   .problem-section {
@@ -2691,6 +2678,31 @@ body.region-global span.global-only { display: inline !important; }
     justify-content: space-between !important;
   }
   
+
+  .nav-actions {
+    display: none !important;
+  }
+  .nav-actions.mobile-open {
+    display: flex !important;
+    flex-direction: column;
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    z-index: 1000;
+  }
+  .nav-actions.mobile-open .btn, .nav-actions.mobile-open .btn-link {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  .nav-actions.mobile-open .region-badge {
+    margin-bottom: 1rem;
+    width: 100%;
+    justify-content: center;
+  }
+
   .mobile-menu-btn {
     display: block;
   }
