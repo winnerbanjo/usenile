@@ -2,8 +2,10 @@ import { initDashboardSim } from './dashboard-sim.js';
 import { initAppConsolidator } from './app-consolidator.js';
 import { initPaymentSim } from './payment-sim.js';
 import { initMapAnimation } from './map-animation.js';
+import { initAnalytics } from './analytics.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  initAnalytics();
   // Initialize general UI features
   initWelcomeModal();
   initNavigationBar();
@@ -16,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordion();
   initFeatureSwitcher();
   initHeroCarousel();
+  initHomepageDispatch();
   
   // Initialize dynamic modules (they will exit early if their target elements are not on the active page)
   initDashboardSim();
@@ -23,6 +26,59 @@ document.addEventListener('DOMContentLoaded', () => {
   initPaymentSim();
   initMapAnimation();
 });
+
+async function initHomepageDispatch() {
+  const postGrid = document.querySelector('[data-homepage-posts]');
+  if (!postGrid) return;
+
+  try {
+    const response = await fetch('/api/articles');
+    if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+    const data = await response.json();
+    const posts = (data.articles || []).slice(0, 3);
+
+    if (!posts.length) {
+      postGrid.innerHTML = '<p class="homepage-post-empty">No published articles yet.</p>';
+      return;
+    }
+
+    postGrid.innerHTML = posts.map(renderHomepagePost).join('');
+  } catch {
+    postGrid.innerHTML = '<p class="homepage-post-empty">Latest articles are unavailable right now.</p>';
+  }
+}
+
+function renderHomepagePost(post) {
+  const image = post.coverImage || '/src/assets/shipping_packages.jpg';
+  const date = post.publishedAt || post.createdAt ? formatHomepagePostDate(post.publishedAt || post.createdAt) : 'Nile Dispatch';
+  return `
+    <a class="homepage-post-card" href="/blog/${escapeHomepagePostAttribute(post.slug)}">
+      <img src="${escapeHomepagePostAttribute(image)}" alt="${escapeHomepagePostAttribute(post.title)}" loading="lazy" />
+      <div>
+        <span>${escapeHomepagePostHtml(post.category || 'Guide')} · ${date}</span>
+        <h3>${escapeHomepagePostHtml(post.title)}</h3>
+        <p>${escapeHomepagePostHtml(post.excerpt || '')}</p>
+      </div>
+    </a>
+  `;
+}
+
+function formatHomepagePostDate(value) {
+  return new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(value));
+}
+
+function escapeHomepagePostHtml(value = '') {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function escapeHomepagePostAttribute(value = '') {
+  return escapeHomepagePostHtml(value).replaceAll('`', '&#096;');
+}
 
 // Homepage Features Tab Switcher
 function initFeatureSwitcher() {

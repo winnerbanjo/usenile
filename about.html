@@ -7,10 +7,263 @@
     <meta name="description" content="Learn about Nile's mission, values, and our vision to become the global operating system powering modern businesses." />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22%2302663c%22/></svg>" />
     <link rel="stylesheet" href="/src/style.css" />
+    <style>
+      /* About Page Specific Styles */
+      .about-hero {
+        padding: 8rem 1.5rem 4rem;
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .about-hero .story-badge {
+        margin-bottom: 1rem;
+        display: inline-block;
+      }
+      .about-hero h1 {
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin-bottom: 2rem;
+      }
+      .about-hero .supporting-text {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.8;
+      }
+
+      /* Core Story Section */
+      .about-story {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 5rem 1.5rem;
+      }
+      .about-story-content {
+        font-size: 1.1rem;
+        line-height: 1.9;
+        color: var(--text-secondary);
+      }
+      .about-story-content p {
+        margin-bottom: 1.5rem;
+      }
+      .about-story-content p:last-child {
+        margin-bottom: 0;
+      }
+      .about-lead {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 2rem !important;
+      }
+
+      /* Mission & Vision Grid */
+      .about-mission-vision {
+        background-color: var(--bg-secondary);
+        padding: 6rem 1.5rem;
+      }
+      .about-mission-vision-grid {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+      }
+      .about-mission-vision-grid .story-badge {
+        margin-bottom: 1.25rem;
+        display: inline-block;
+      }
+      .about-mission-vision-grid p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--text-secondary);
+      }
+
+      /* Founder Note */
+      .about-founder {
+        padding: 6rem 1.5rem;
+        text-align: center;
+        border-top: 1px solid #f1f5f9;
+      }
+      .about-founder-inner {
+        max-width: 680px;
+        margin: 0 auto;
+      }
+      .about-founder-avatar {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto 2rem;
+        border: 3px solid white;
+        box-shadow: var(--card-shadow);
+      }
+      .about-founder-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .about-founder .story-badge {
+        display: inline-block;
+        margin-bottom: 2rem;
+      }
+      .about-founder-body {
+        font-size: 1.1rem;
+        line-height: 1.9;
+        color: var(--text-secondary);
+        text-align: left;
+      }
+      .about-founder-body p {
+        margin-bottom: 1.5rem;
+      }
+      .about-founder-quote {
+        font-weight: 700;
+        font-size: 1.35rem;
+        color: var(--text-primary);
+        margin: 2rem 0 !important;
+        text-align: center;
+        font-style: italic;
+      }
+      .about-founder-sig {
+        margin-top: 3rem;
+        text-align: center;
+      }
+      .about-founder-sig .name {
+        font-weight: 800;
+        color: var(--text-primary);
+        font-size: 1.2rem;
+      }
+      .about-founder-sig .role {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-top: 0.25rem;
+      }
+
+      /* What We Believe */
+      .about-beliefs {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 6rem 1.5rem;
+      }
+      .about-beliefs-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+      .about-beliefs-list {
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+      }
+      .about-beliefs-list h3 {
+        font-size: 1.4rem;
+        margin-bottom: 0.75rem;
+        color: var(--text-primary);
+      }
+      .about-beliefs-list p {
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: var(--text-secondary);
+      }
+
+      /* What We Do / Why Nile */
+      .about-do-why {
+        border-top: 1px solid #f1f5f9;
+        border-bottom: 1px solid #f1f5f9;
+        background: var(--bg-primary);
+        padding: 6rem 1.5rem;
+      }
+      .about-do-why-grid {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+      }
+      .about-do-why-grid .story-badge {
+        display: inline-block;
+        margin-bottom: 1.25rem;
+      }
+      .about-do-why-grid .section-intro {
+        font-size: 1.1rem;
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+      }
+      .about-do-why-grid ul {
+        font-size: 1.05rem;
+        line-height: 2;
+        color: var(--text-secondary);
+        padding-left: 1.25rem;
+        margin-bottom: 1.5rem;
+      }
+      .about-do-why-grid .highlight {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--accent-emerald);
+      }
+      .about-do-why-grid .body-text {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--text-secondary);
+      }
+      .about-do-why-grid .body-text p {
+        margin-bottom: 1rem;
+      }
+      .about-do-why-grid .body-text strong {
+        color: var(--text-primary);
+      }
+
+      /* CTA */
+      .about-cta {
+        text-align: center;
+        padding: 6rem 1.5rem;
+      }
+      .about-cta-inner {
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      .about-cta h2 {
+        font-size: 2.25rem;
+        margin-bottom: 1.5rem;
+      }
+      .about-cta p {
+        font-size: 1.15rem;
+        line-height: 1.7;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+      }
+      .about-cta-taglines {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: var(--accent-emerald);
+        font-size: 1.1rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .about-hero h1 {
+          font-size: 2.25rem;
+        }
+        .about-mission-vision-grid,
+        .about-do-why-grid {
+          grid-template-columns: 1fr;
+          gap: 3rem;
+        }
+        .about-story,
+        .about-beliefs,
+        .about-founder,
+        .about-cta,
+        .about-do-why,
+        .about-mission-vision {
+          padding: 4rem 1.5rem;
+        }
+      }
+    </style>
   </head>
   <body class="region-global">
 
-        <!-- Welcome Modal (Personalization Entry Experience) -->
+    <!-- Welcome Modal (Personalization Entry Experience) -->
     <div id="welcome-modal-container" class="welcome-modal-container">
       <div class="welcome-modal-backdrop"></div>
       <div class="welcome-modal">
@@ -73,7 +326,7 @@
                 </div>
                 <div>
                   <span class="dropdown-item-title">Nile Shipping</span>
-                  <span class="dropdown-item-desc">Generate labels & tracking maps</span>
+                  <span class="dropdown-item-desc">Generate labels &amp; tracking maps</span>
                 </div>
               </a>
             </div>
@@ -86,7 +339,7 @@
                 </div>
                 <div>
                   <span class="dropdown-item-title">Nile AI Assistant</span>
-                  <span class="dropdown-item-desc">Write listings & support auto-replies</span>
+                  <span class="dropdown-item-desc">Write listings &amp; support auto-replies</span>
                 </div>
               </a>
             </div>
@@ -102,7 +355,7 @@
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; min-width: 320px;">
                 <a href="solutions.html#industries" class="dropdown-item-simple">Fashion</a>
                 <a href="solutions.html#industries" class="dropdown-item-simple">Beauty</a>
-                <a href="solutions.html#industries" class="dropdown-item-simple">Food & Services</a>
+                <a href="solutions.html#industries" class="dropdown-item-simple">Food &amp; Services</a>
                 <a href="solutions.html#industries" class="dropdown-item-simple">Electronics</a>
                 <a href="solutions.html#industries" class="dropdown-item-simple">Wholesale</a>
                 <a href="solutions.html#industries" class="dropdown-item-simple">Services</a>
@@ -123,7 +376,7 @@
                 </div>
                 <div>
                   <span class="dropdown-item-title">About Us</span>
-                  <span class="dropdown-item-desc">Our mission, values & leadership</span>
+                  <span class="dropdown-item-desc">Our mission, values &amp; leadership</span>
                 </div>
               </a>
               <a href="team.html" class="dropdown-item">
@@ -141,7 +394,7 @@
                 </div>
                 <div>
                   <span class="dropdown-item-title">Careers</span>
-                  <span class="dropdown-item-desc">Join the engineering & product team</span>
+                  <span class="dropdown-item-desc">Join the engineering &amp; product team</span>
                 </div>
               </a>
               <a href="security.html" class="dropdown-item">
@@ -181,6 +434,7 @@
 
         <li><a href="developers.html">Developers</a></li>
         <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="/blog">Blog</a></li>
       </ul>
       
       <div class="nav-actions">
@@ -190,83 +444,113 @@
       </div>
     </nav>
 
-    <!-- About Header Hero -->
-    <header class="pricing-header-hero scroll-reveal" style="padding: 8rem 1.5rem 4rem; text-align: center; max-width: 900px; margin: 0 auto;">
-      <span class="story-badge" style="margin-bottom: 1rem; display: inline-block;">About Nile</span>
-      <h1 style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 2rem;">Building the platform behind the next generation of businesses.</h1>
-      <p class="supporting-text" style="font-size: 1.25rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
-        Every great business starts with an idea.<br><br>
-        The challenge isn't the idea. It's everything that comes after it.<br>
-        Building a website. Accepting payments. Managing customers. Tracking orders. Shipping products. Growing without juggling ten different tools.
+    <!-- ============================================ -->
+    <!-- ABOUT HERO                                    -->
+    <!-- ============================================ -->
+    <header class="about-hero scroll-reveal">
+      <span class="story-badge">About Nile</span>
+      <h1>Building the platform behind the next generation of businesses.</h1>
+      <p class="supporting-text">
+        Every great business starts with an idea. The challenge isn't the idea — it's everything that comes after it. Building a website. Accepting payments. Managing customers. Tracking orders. Shipping products. Growing without juggling ten different tools.
       </p>
     </header>
 
     <main>
-      <!-- Core Story -->
-      <section class="story-section scroll-reveal" style="max-width: 800px; margin: 0 auto; padding: 4rem 1.5rem;">
-        <div style="font-size: 1.15rem; line-height: 1.8; color: var(--text-secondary); display: flex; flex-direction: column; gap: 1.5rem;">
-          <p><strong style="color: var(--text-primary); font-size: 1.3rem;">That's why we built Nile.</strong></p>
+
+      <!-- ============================================ -->
+      <!-- CORE STORY                                    -->
+      <!-- ============================================ -->
+      <section class="about-story scroll-reveal">
+        <div class="about-story-content">
+          <p class="about-lead">That's why we built Nile.</p>
           <p>Nile is a modern commerce platform that helps businesses launch, operate, and grow from one place. Whether you're selling products, offering services, or building the next great brand, Nile gives you the tools to create a professional online presence, manage your operations, accept payments, and scale with confidence.</p>
           <p>We believe technology should remove complexity, not create it.</p>
           <p>Instead of forcing businesses to piece together multiple apps, plugins, and disconnected systems, Nile brings everything together into one intuitive platform designed for modern entrepreneurs.</p>
           <p>Today, thousands of businesses use Nile to build their brands, serve customers, and grow their businesses. Tomorrow, our mission is even bigger.</p>
           <p>We're building the infrastructure that helps ambitious businesses succeed, wherever they are in the world.</p>
-          <p>Our vision isn't simply to build websites.<br>
-          It's to build the platform people rely on every morning to run their business.</p>
+          <p>Our vision isn't simply to build websites. It's to build the platform people rely on every morning to run their business.</p>
         </div>
       </section>
 
-      <!-- Mission & Vision -->
-      <section class="scroll-reveal" style="background-color: var(--bg-secondary); padding: 6rem 1.5rem;">
-        <div style="max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem;">
+      <!-- ============================================ -->
+      <!-- MISSION & VISION                              -->
+      <!-- ============================================ -->
+      <section class="about-mission-vision scroll-reveal">
+        <div class="about-mission-vision-grid">
           <div>
             <span class="story-badge">Our Mission</span>
-            <p style="font-size: 1.15rem; line-height: 1.7; color: var(--text-secondary);">
-              To make starting and growing a business dramatically simpler by providing powerful, beautifully designed tools that help entrepreneurs build with confidence.
-            </p>
+            <p>To make starting and growing a business dramatically simpler by providing powerful, beautifully designed tools that help entrepreneurs build with confidence.</p>
           </div>
           <div>
             <span class="story-badge">Our Vision</span>
-            <p style="font-size: 1.15rem; line-height: 1.7; color: var(--text-secondary);">
-              To become the world's most trusted platform for launching and running modern businesses.<br><br>
-              We imagine a future where anyone, anywhere, can turn an idea into a successful company without worrying about complicated technology.
-            </p>
+            <p>To become the world's most trusted platform for launching and running modern businesses.</p>
+            <p style="margin-top: 1rem;">We imagine a future where anyone, anywhere, can turn an idea into a successful company without worrying about complicated technology.</p>
           </div>
         </div>
       </section>
 
-      <!-- What We Believe -->
-      <section class="story-section scroll-reveal" style="max-width: 800px; margin: 0 auto; padding: 6rem 1.5rem;">
-        <div style="text-align: center; margin-bottom: 4rem;">
+      <!-- ============================================ -->
+      <!-- FOUNDER NOTE                                  -->
+      <!-- ============================================ -->
+      <section class="about-founder scroll-reveal">
+        <div class="about-founder-inner">
+          <div class="about-founder-avatar">
+            <img src="/src/assets/winner_founder.jpg" alt="Winner Oyebanjo - Nile Founder" />
+          </div>
+          <span class="story-badge">A Note From Our Founder</span>
+          <div class="about-founder-body">
+            <p>When we started Nile, our goal wasn't simply to create another website builder. We wanted to build something that genuinely helps people create better businesses.</p>
+            <p>We've seen incredible entrepreneurs held back by complicated software, disconnected tools, and unnecessary barriers. We believed there had to be a simpler way.</p>
+            <p>Nile was built to remove those barriers.</p>
+            <p>Every feature we create, every improvement we make, and every decision we take is guided by one question:</p>
+            <p class="about-founder-quote">"Does this help our customers build a better business?"</p>
+            <p>We're still at the beginning of our journey, but our ambition is clear.</p>
+            <p>To build one of the most trusted business platforms in the world.</p>
+            <p>Thank you for building with us.</p>
+          </div>
+          <div class="about-founder-sig">
+            <p class="name">Winner Oyebanjo</p>
+            <p class="role">Founder &amp; CEO, Nile</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- WHAT WE BELIEVE                               -->
+      <!-- ============================================ -->
+      <section class="about-beliefs scroll-reveal">
+        <div class="about-beliefs-header">
           <span class="story-badge">What We Believe</span>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 3rem;">
+        <div class="about-beliefs-list">
           <div>
-            <h3 style="font-size: 1.5rem; margin-bottom: 0.75rem;">Businesses should spend more time growing than managing software.</h3>
-            <p style="font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">Technology should work quietly in the background so founders can focus on their customers.</p>
+            <h3>Businesses should spend more time growing than managing software.</h3>
+            <p>Technology should work quietly in the background so founders can focus on their customers.</p>
           </div>
           <div>
-            <h3 style="font-size: 1.5rem; margin-bottom: 0.75rem;">Great design builds trust.</h3>
-            <p style="font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">Beautiful products create confidence. Every interaction with Nile is designed to feel fast, intuitive, and effortless.</p>
+            <h3>Great design builds trust.</h3>
+            <p>Beautiful products create confidence. Every interaction with Nile is designed to feel fast, intuitive, and effortless.</p>
           </div>
           <div>
-            <h3 style="font-size: 1.5rem; margin-bottom: 0.75rem;">Entrepreneurship should be accessible.</h3>
-            <p style="font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">Starting a business shouldn't require a technical background or a large team. Powerful tools should be available to everyone.</p>
+            <h3>Entrepreneurship should be accessible.</h3>
+            <p>Starting a business shouldn't require a technical background or a large team. Powerful tools should be available to everyone.</p>
           </div>
           <div>
-            <h3 style="font-size: 1.5rem; margin-bottom: 0.75rem;">We build for the long term.</h3>
-            <p style="font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">Every feature, product, and decision is designed with longevity in mind. We aren't building software for today. We're building infrastructure for the next generation of businesses.</p>
+            <h3>We build for the long term.</h3>
+            <p>Every feature, product, and decision is designed with longevity in mind. We aren't building software for today. We're building infrastructure for the next generation of businesses.</p>
           </div>
         </div>
       </section>
 
-      <!-- What We Do / Why Nile -->
-      <section class="scroll-reveal" style="border-top: 1px solid #F1F5F9; border-bottom: 1px solid #F1F5F9; background: var(--bg-primary); padding: 6rem 1.5rem;">
-        <div style="max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem;">
+      <!-- ============================================ -->
+      <!-- WHAT WE DO / WHY NILE                         -->
+      <!-- ============================================ -->
+      <section class="about-do-why scroll-reveal">
+        <div class="about-do-why-grid">
           <div>
             <span class="story-badge">What We Do</span>
-            <p style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 1.5rem; font-weight: 500;">Nile helps businesses:</p>
-            <ul style="font-size: 1.05rem; line-height: 2; color: var(--text-secondary); padding-left: 1.25rem; margin-bottom: 1.5rem;">
+            <p class="section-intro">Nile helps businesses:</p>
+            <ul>
               <li>Launch beautiful online stores and websites</li>
               <li>Accept local and international payments</li>
               <li>Manage products, inventory, and customers</li>
@@ -274,66 +558,36 @@
               <li>Generate invoices and business reports</li>
               <li>Grow with powerful business tools from one unified dashboard</li>
             </ul>
-            <p style="font-size: 1.05rem; font-weight: 600; color: var(--accent-emerald);">As businesses grow, Nile grows with them.</p>
+            <p class="highlight">As businesses grow, Nile grows with them.</p>
           </div>
           <div>
             <span class="story-badge">Why Nile?</span>
-            <div style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary); display: flex; flex-direction: column; gap: 1rem;">
-              <p>Most businesses begin with disconnected tools.<br>
-              One app for payments.<br>
-              Another for websites.<br>
-              Another for customers.<br>
-              Another for shipping.<br>
-              Another for analytics.</p>
-              <p><strong style="color: var(--text-primary);">We think there's a better way.</strong></p>
+            <div class="body-text">
+              <p>Most businesses begin with disconnected tools. One app for payments. Another for websites. Another for customers. Another for shipping. Another for analytics.</p>
+              <p><strong>We think there's a better way.</strong></p>
               <p>Nile brings everything together into one platform, allowing entrepreneurs to focus on building memorable businesses instead of managing software.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Built for Ambitious Businesses -->
-      <section class="scroll-reveal" style="text-align: center; padding: 6rem 1.5rem;">
-        <div style="max-width: 700px; margin: 0 auto;">
-          <h2 style="font-size: 2.25rem; margin-bottom: 1.5rem;">Built for Ambitious Businesses</h2>
-          <p style="font-size: 1.15rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 2rem;">
-            Whether you're launching your very first brand, opening your first online store, or scaling an established company, Nile is designed to support every stage of your journey.
-          </p>
-          <div style="display: flex; flex-direction: column; gap: 0.5rem; font-weight: 600; color: var(--accent-emerald); font-size: 1.1rem;">
+      <!-- ============================================ -->
+      <!-- BUILT FOR AMBITIOUS BUSINESSES                -->
+      <!-- ============================================ -->
+      <section class="about-cta scroll-reveal">
+        <div class="about-cta-inner">
+          <h2>Built for Ambitious Businesses</h2>
+          <p>Whether you're launching your very first brand, opening your first online store, or scaling an established company, Nile is designed to support every stage of your journey.</p>
+          <div class="about-cta-taglines">
             <span>From first customer to first million.</span>
             <span>From local business to global brand.</span>
           </div>
         </div>
       </section>
 
-      <!-- Founder Spotlight -->
-      <section class="story-section scroll-reveal" style="background: var(--bg-secondary); border-top: 1px solid #F1F5F9; padding: 6rem 1.5rem; text-align: center;">
-        <div style="max-width: 700px; margin: 0 auto;">
-          <div style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; margin: 0 auto 2rem; border: 3px solid white; box-shadow: var(--card-shadow);">
-            <img src="/src/assets/winner_founder.jpg" alt="Winner Oyebanjo - Nile Founder" style="width: 100%; height: 100%; object-fit: cover;" />
-          </div>
-          <span class="story-badge">A Note From Our Founder</span>
-          <div style="font-size: 1.15rem; line-height: 1.8; color: var(--text-secondary); margin-top: 2rem; display: flex; flex-direction: column; gap: 1.5rem;">
-            <p>When we started Nile, our goal wasn't simply to create another website builder.<br>
-            We wanted to build something that genuinely helps people create better businesses.</p>
-            <p>We've seen incredible entrepreneurs held back by complicated software, disconnected tools, and unnecessary barriers. We believed there had to be a simpler way.</p>
-            <p>Nile was built to remove those barriers.</p>
-            <p>Every feature we create, every improvement we make, and every decision we take is guided by one question:</p>
-            <p style="font-weight: 700; font-size: 1.4rem; color: var(--text-primary); margin: 1rem 0;">"Does this help our customers build a better business?"</p>
-            <p>We're still at the beginning of our journey, but our ambition is clear.</p>
-            <p>To build one of the most trusted business platforms in the world.</p>
-            <p>Thank you for building with us.</p>
-          </div>
-          <div style="margin-top: 3rem;">
-            <p style="font-weight: 800; color: var(--text-primary); font-size: 1.25rem;">Winner Oyebanjo</p>
-            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">Founder & CEO, Nile</p>
-          </div>
-        </div>
-      </section>
-
     </main>
 
-    <!-- Footer -->
+    <!-- Footer (matches homepage) -->
     <footer>
       <div class="footer-grid">
         <div class="footer-brand">
@@ -410,7 +664,7 @@
         </div>
       </div>
       
-            <div class="footer-offices" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2.5rem; padding: 2.5rem 0; border-top: 1px solid #f1f5f9; margin-bottom: 1rem;">
+      <div class="footer-offices" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2.5rem; padding: 2.5rem 0; border-top: 1px solid #f1f5f9; margin-bottom: 1rem;">
         <div class="footer-office-col">
           <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">Nigeria</h5>
           <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">20 Oyinbogbola Street, Ipaja<br/>Lagos, Nigeria</p>
@@ -421,7 +675,7 @@
         </div>
         <div class="footer-office-col">
           <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">United States</h5>
-          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">The Mill Space<br/>221 West 10th Street, 3rd & 4th Floor<br/>Wilmington, Delaware, DE 19801<br/>United States</p>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">The Mill Space<br/>221 West 10th Street, 3rd &amp; 4th Floor<br/>Wilmington, Delaware, DE 19801<br/>United States</p>
         </div>
         <div class="footer-office-col">
           <h5 style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.75rem; font-weight: 700;">Support</h5>
@@ -474,7 +728,7 @@
             </select>
           </div>
           
-          <button type="submit" class="btn btn-emerald" style="width: 100%; margin-top: 1rem;">Confirm & Setup Store</button>
+          <button type="submit" class="btn btn-emerald" style="width: 100%; margin-top: 1rem;">Confirm &amp; Setup Store</button>
         </form>
       </div>
     </div>

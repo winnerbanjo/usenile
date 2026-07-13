@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
   server: {
     port: 3000,
     open: true
@@ -30,7 +31,10 @@ export default defineConfig({
         merchant_agreement: resolve(__dirname, 'merchant-agreement.html'),
         sla: resolve(__dirname, 'sla.html'),
         samples: resolve(__dirname, 'samples.html'),
-        knowledge: resolve(__dirname, 'knowledge.html')
+        knowledge: resolve(__dirname, 'knowledge.html'),
+        blog: resolve(__dirname, 'blog.html'),
+        article: resolve(__dirname, 'article.html'),
+        admin: resolve(__dirname, 'admin.html')
       }
     }
   }
