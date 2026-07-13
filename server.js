@@ -277,7 +277,7 @@ let fallbackArticles = seedArticles();
 let fallbackCategories = seedCategories();
 let fallbackAdminHash = '';
 
-async function boot() {
+async function boot({ listen = true } = {}) {
   fallbackAdminHash = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'admin', 12);
 
   if (process.env.LOCAL_DEMO_MODE === 'false') {
@@ -299,6 +299,8 @@ async function boot() {
     mongoReady = false;
     console.log('Local demo mode enabled, using in-memory blog store.');
   }
+
+  if (!listen) return;
 
   const server = app.listen(port, () => {
     console.log(`Nile local site: http://localhost:${port}`);
@@ -1031,4 +1033,10 @@ function escapeAttribute(value = '') {
   return escapeHtml(value).replaceAll('`', '&#096;');
 }
 
-boot();
+if (process.env.VERCEL) {
+  await boot({ listen: false });
+} else {
+  await boot();
+}
+
+export default app;
