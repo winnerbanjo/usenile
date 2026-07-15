@@ -940,7 +940,7 @@ function organizationSchema() {
     url: siteUrl,
     logo: absoluteUrl('/src/assets/nile_logo.png'),
     email: 'business@nile.ng',
-    sameAs: ['https://www.instagram.com/getnile.co/', 'https://www.tiktok.com/@thewinnerbanjo']
+    sameAs: ['https://www.instagram.com/getnile.co/', 'https://www.tiktok.com/@nileforbusiness']
   };
 }
 
