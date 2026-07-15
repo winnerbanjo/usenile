@@ -1187,9 +1187,9 @@ section {
 
 .app-consolidation-container {
   position: relative;
-  width: 100%;
-  max-width: 700px;
-  height: 350px;
+  width: 95%;
+  max-width: 1400px;
+  height: 500px;
   margin: 0 auto;
 }
 
