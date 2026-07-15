@@ -211,7 +211,7 @@ function seedArticles() {
       title: 'Why Snapchat Ads Are the Most Underrated Marketing Channel for Nigerian Businesses',
       slug: 'why-snapchat-ads-are-the-most-underrated-marketing-platform',
       excerpt: 'If you are spending all your budget on Instagram and Facebook, you are missing out on one of the most powerful ad platforms today.',
-      coverImage: '/src/assets/storefront_laptop.jpg',
+      coverImage: '/src/assets/snapchat-ads-blog.jpg',
       category: 'Marketing',
       tags: ['snapchat-ads', 'marketing', 'nigeria'],
       views: 0,
