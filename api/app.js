@@ -1,23 +1,28 @@
-import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const rootDir = dirname(fileURLToPath(import.meta.url));
-const port = Number(process.env.PORT || 4000);
+const rootDir = dirname(dirname(fileURLToPath(import.meta.url)));
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.usenile.co';
+const primaryHost = new URL(siteUrl).host;
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || '';
 const adminEmail = process.env.ADMIN_EMAIL || 'admin@nile.ng';
 const adminPassword = process.env.ADMIN_PASSWORD || 'NileAdmin2026!';
 const sessionCookie = 'nile_admin_session=local-dev-session';
 
 let articles = seedArticles();
-let categories = seedCategories();
+const categories = [
+  { name: 'Online Business', slug: 'online-business', description: 'Practical launch guides for Nigerian founders building online.' },
+  { name: 'Websites', slug: 'websites', description: 'How to turn a business idea into a trusted digital storefront.' },
+  { name: 'Pricing', slug: 'pricing', description: 'Cost guides and budgeting advice for business owners.' },
+  { name: 'Payments', slug: 'payments', description: 'Checkout, payment recovery, and conversion confidence.' },
+  { name: 'Fulfillment', slug: 'fulfillment', description: 'Shipping, delivery, and post-purchase operations.' }
+];
 
 const mimeTypes = {
   '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
@@ -27,15 +32,39 @@ const mimeTypes = {
   '.xml': 'application/xml; charset=utf-8'
 };
 
-const server = createServer(async (req, res) => {
+const cleanHtmlPages = new Set([
+  'about',
+  'ai',
+  'careers',
+  'contact',
+  'cookies',
+  'developers',
+  'dpa',
+  'knowledge',
+  'merchant-agreement',
+  'pricing',
+  'privacy',
+  'refund-policy',
+  'samples',
+  'security',
+  'sla',
+  'solutions',
+  'team',
+  'terms'
+]);
+
+export default async function handler(req, res) {
   try {
-    const url = new URL(req.url, `http://localhost:${port}`);
-    const method = req.method === 'HEAD' ? 'GET' : req.method || 'GET';
+    const url = new URL(req.url, siteUrl);
+    const method = req.method === 'HEAD' ? 'GET' : req.method;
+    const requestHost = String(req.headers.host || '').toLowerCase();
+
+    if (method === 'GET' && shouldRedirectToPrimaryHost(requestHost)) {
+      return redirect(res, `${siteUrl}${url.pathname}${url.search}`);
+    }
 
     if (method === 'GET' && url.pathname === '/healthz') return sendText(res, 'ok');
-    if (method === 'GET' && url.pathname === '/robots.txt') {
-      return sendText(res, `User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: ${siteUrl}/sitemap.xml`);
-    }
+    if (method === 'GET' && url.pathname === '/robots.txt') return sendText(res, `User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: ${siteUrl}/sitemap.xml`);
     if (method === 'GET' && url.pathname === '/sitemap.xml') return sendXml(res, sitemapXml());
     if (method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) return sendHtml(res, await readHtml('index.html'));
     if (method === 'GET' && url.pathname === '/admin') return sendHtml(res, await readHtml('admin.html'));
@@ -43,6 +72,7 @@ const server = createServer(async (req, res) => {
     if (method === 'GET' && url.pathname.startsWith('/blog/category/')) return sendHtml(res, await readHtml('blog.html'));
     if (method === 'GET' && url.pathname.startsWith('/blog/')) return sendArticlePage(res, url.pathname.split('/').pop());
     if (method === 'GET' && url.pathname.endsWith('.html')) return sendHtml(res, await readHtml(url.pathname.slice(1)));
+    if (method === 'GET' && cleanHtmlPages.has(url.pathname.slice(1))) return sendHtml(res, await readHtml(`${url.pathname.slice(1)}.html`));
     if (method === 'GET' && (url.pathname.startsWith('/src/') || url.pathname.startsWith('/public/'))) return sendStatic(res, url.pathname.slice(1));
 
     if (url.pathname === '/api/auth/login' && method === 'POST') return login(req, res);
@@ -51,24 +81,12 @@ const server = createServer(async (req, res) => {
     if (url.pathname === '/api/articles' && method === 'GET') return apiArticles(res, url);
     if (url.pathname.startsWith('/api/articles/') && method === 'GET') return apiArticle(res, url.pathname.split('/').pop());
     if (url.pathname === '/api/categories' && method === 'GET') return apiCategories(res);
-    if (url.pathname === '/api/admin/articles' && method === 'POST') return saveArticle(req, res);
-    if (url.pathname.startsWith('/api/admin/articles/') && method === 'PUT') return updateArticle(req, res, url.pathname.split('/').pop());
-    if (url.pathname.endsWith('/archive') && method === 'POST') return archiveArticle(res, url.pathname.split('/').at(-2));
-    if (url.pathname === '/api/admin/categories' && method === 'POST') return addCategory(req, res);
-    if (url.pathname === '/api/cloudinary/signature' && method === 'POST') {
-      return sendJson(res, { error: 'Cloudinary upload signing is unavailable in local fallback mode.' }, 503);
-    }
 
     sendText(res, 'Not found', 404);
   } catch (error) {
     sendText(res, error.message || 'Server error', 500);
   }
-});
-
-server.listen(port, () => {
-  console.log(`Nile local fallback site: http://localhost:${port}`);
-  console.log(`Admin: http://localhost:${port}/admin`);
-});
+}
 
 async function readHtml(file) {
   return readFile(join(rootDir, file), 'utf8');
@@ -80,14 +98,13 @@ async function sendStatic(res, file) {
 }
 
 async function sendArticlePage(res, slug) {
-  const article = articles.find((item) => item.slug === slug && ['published', 'draft', 'scheduled'].includes(item.status));
+  const article = articles.find((item) => item.slug === slug && item.status === 'published');
   const html = await readHtml('article.html');
   if (!article) return sendHtml(res, html.replace('<div data-article-detail></div>', '<div data-article-detail><h1>Article not found</h1><p>This Nile Dispatch article may have moved or been unpublished.</p></div>'), 404);
-  const pageTitle = article.seo?.title || `${article.title} | Nile`;
   article.views += 1;
   const rendered = html
-    .replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(pageTitle)}</title>`)
-    .replace(/<meta name="description"[\s\S]*?>/i, `<meta name="description" content="${escapeAttribute(article.seo?.description || article.excerpt)}" />`)
+    .replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(article.seo.title)}</title>`)
+    .replace(/<meta name="description"[\s\S]*?>/i, `<meta name="description" content="${escapeAttribute(article.seo.description)}" />`)
     .replace('</head>', `    <link rel="canonical" href="${siteUrl}/blog/${article.slug}" />\n  </head>`)
     .replace('<div data-article-detail></div>', `<div data-article-detail data-server-rendered="true">${renderArticle(article)}</div>`);
   sendHtml(res, rendered);
@@ -98,11 +115,11 @@ function renderArticle(article) {
       <span class="blog-eyebrow">${escapeHtml(article.category)}</span>
       <h1>${escapeHtml(article.title)}</h1>
       <div class="article-meta">
-        <span>${escapeHtml(article.author?.name || 'Nile Editorial')}</span>
-        <span>${formatDate(article.publishedAt || article.createdAt)}</span>
-        <span>${article.readingMinutes || 2} min read</span>
+        <span>${escapeHtml(article.author.name)}</span>
+        <span>${formatDate(article.publishedAt)}</span>
+        <span>${publicArticle(article).readingMinutes} min read</span>
       </div>
-      ${article.coverImage ? `<img class="article-cover" src="${escapeAttribute(article.coverImage)}" alt="${escapeAttribute(article.title)}" />` : ''}
+      <img class="article-cover" src="${escapeAttribute(article.coverImage)}" alt="${escapeAttribute(article.title)}" />
       <div class="article-content">${article.content}</div>
       <div class="article-inline-cta">
         <span class="blog-eyebrow">Next step</span>
@@ -116,7 +133,7 @@ async function login(req, res) {
   if (String(body.email || '').toLowerCase() !== adminEmail.toLowerCase() || String(body.password || '') !== adminPassword) {
     return sendJson(res, { error: 'Invalid email or password' }, 401);
   }
-  res.setHeader('Set-Cookie', `${sessionCookie}; Path=/; SameSite=Lax`);
+  res.setHeader('Set-Cookie', `${sessionCookie}; Path=/; SameSite=Lax; Secure`);
   sendJson(res, { ok: true, email: adminEmail, role: 'admin' });
 }
 
@@ -126,22 +143,21 @@ function logout(res) {
 }
 
 function me(req, res) {
-  if (!isAuthed(req)) return sendJson(res, { error: 'Authentication required' }, 401);
+  if (!String(req.headers.cookie || '').includes('nile_admin_session=local-dev-session')) return sendJson(res, { error: 'Authentication required' }, 401);
   sendJson(res, { email: adminEmail, role: 'admin' });
 }
 
 function apiArticles(res, url) {
-  const includeDrafts = url.searchParams.get('status') === 'all';
   const category = url.searchParams.get('category') || '';
   const data = articles
-    .filter((article) => (includeDrafts ? article.status !== 'archived' : article.status === 'published'))
+    .filter((article) => article.status === 'published')
     .filter((article) => !category || article.categorySlug === category)
     .map(publicArticle);
   sendJson(res, { articles: data });
 }
 
 function apiArticle(res, slug) {
-  const article = articles.find((item) => item.slug === slug);
+  const article = articles.find((item) => item.slug === slug && item.status === 'published');
   if (!article) return sendJson(res, { error: 'Article not found' }, 404);
   article.views += 1;
   sendJson(res, { article: publicArticle(article) });
@@ -149,98 +165,31 @@ function apiArticle(res, slug) {
 
 function apiCategories(res) {
   const counts = new Map();
-  articles.filter((article) => article.status === 'published').forEach((article) => counts.set(article.categorySlug, (counts.get(article.categorySlug) || 0) + 1));
-  const merged = [...categories].map((category) => ({ ...category, count: counts.get(category.slug) || 0 }));
-  sendJson(res, { categories: merged });
+  articles.forEach((article) => counts.set(article.categorySlug, (counts.get(article.categorySlug) || 0) + 1));
+  sendJson(res, { categories: categories.map((category) => ({ ...category, count: counts.get(category.slug) || 0 })) });
 }
 
-async function saveArticle(req, res) {
-  const body = await readJson(req);
-  const article = makeArticle(body);
-  articles.unshift(article);
-  sendJson(res, { article: publicArticle(article) }, 201);
-}
-
-async function updateArticle(req, res, id) {
-  const body = await readJson(req);
-  const index = articles.findIndex((item) => item.id === id || item._id === id);
-  if (index < 0) return sendJson(res, { error: 'Article not found' }, 404);
-  articles[index] = { ...articles[index], ...makeArticle(body, articles[index]), updatedAt: new Date().toISOString() };
-  sendJson(res, { article: publicArticle(articles[index]) });
-}
-
-function archiveArticle(res, id) {
-  const article = articles.find((item) => item.id === id || item._id === id);
-  if (article) article.status = 'archived';
-  sendJson(res, { ok: true });
-}
-
-async function addCategory(req, res) {
-  const body = await readJson(req);
-  const name = String(body.name || '').trim();
-  if (!name) return sendJson(res, { error: 'Category name is required' }, 400);
-  const category = { name, slug: makeSlug(name), description: String(body.description || '') };
-  if (!categories.some((item) => item.slug === category.slug)) categories.push(category);
-  sendJson(res, { category }, 201);
-}
-
-function makeArticle(input, existing = {}) {
-  const now = new Date().toISOString();
-  const category = input.category || 'Commerce Growth';
-  const title = input.title || existing.title || 'Untitled article';
-  const slug = makeSlug(input.slug || title);
-  return {
-    ...existing,
-    _id: existing._id || `local-${Date.now()}`,
-    id: existing.id || existing._id || `local-${Date.now()}`,
-    title,
-    slug,
-    excerpt: input.excerpt || '',
-    coverImage: input.coverImage || '',
-    category,
-    categorySlug: makeSlug(input.categorySlug || category),
-    tags: input.tags || [],
-    author: input.author || { name: 'Nile Editorial', role: 'Commerce infrastructure team' },
-    seo: input.seo || { title, description: input.excerpt || '' },
-    content: input.content || '<p>Start writing here.</p>',
-    status: input.status || 'draft',
-    scheduledAt: input.scheduledAt || null,
-    publishedAt: input.status === 'published' ? existing.publishedAt || now : existing.publishedAt,
-    createdAt: existing.createdAt || now,
-    updatedAt: now,
-    views: existing.views || 0,
-    conversions: existing.conversions || 0
-  };
+async function readJson(req) {
+  const chunks = [];
+  for await (const chunk of req) chunks.push(chunk);
+  return JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
 }
 
 function publicArticle(article) {
   return {
     ...article,
-    id: article.id || article._id,
+    id: article.id,
     readingMinutes: Math.max(2, Math.ceil(stripHtml(article.content).split(/\s+/).length / 220)),
     canonical: `${siteUrl}/blog/${article.slug}`
   };
 }
 
 function sitemapXml() {
-  const articleUrls = articles
-    .filter((article) => article.status === 'published')
-    .map((article) => `<url><loc>${siteUrl}/blog/${article.slug}</loc><lastmod>${new Date(article.updatedAt || Date.now()).toISOString()}</lastmod></url>`)
-    .join('');
-  const pages = ['/', '/solutions.html', '/pricing.html', '/blog', '/knowledge.html', '/about.html', '/contact.html']
+  const articleUrls = articles.map((article) => `<url><loc>${siteUrl}/blog/${article.slug}</loc><lastmod>${article.updatedAt}</lastmod></url>`).join('');
+  const pages = ['/', '/solutions', '/pricing', '/blog', '/knowledge', '/about', '/contact']
     .map((path) => `<url><loc>${siteUrl}${path}</loc></url>`)
     .join('');
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages}${articleUrls}</urlset>`;
-}
-
-function seedCategories() {
-  return [
-    { name: 'Online Business', slug: 'online-business', description: 'Practical launch guides for Nigerian founders building online.' },
-    { name: 'Websites', slug: 'websites', description: 'How to turn a business idea into a trusted digital storefront.' },
-    { name: 'Pricing', slug: 'pricing', description: 'Cost guides and budgeting advice for business owners.' },
-    { name: 'Payments', slug: 'payments', description: 'Checkout, payment recovery, and conversion confidence.' },
-    { name: 'Fulfillment', slug: 'fulfillment', description: 'Shipping, delivery, and post-purchase operations.' }
-  ];
 }
 
 function seedArticles() {
@@ -335,14 +284,13 @@ function seedArticles() {
 
 function seedArticle({ title, slug, excerpt, coverImage, category, tags, views, conversions, now, content }) {
   return {
-    _id: slug,
     id: slug,
     title,
     slug,
     excerpt,
     coverImage,
     category,
-    categorySlug: makeSlug(category),
+    categorySlug: slugify(category),
     tags,
     author: { name: 'Nile Editorial', role: 'Commerce infrastructure team' },
     seo: { title: `${title} | Nile`, description: excerpt },
@@ -578,18 +526,8 @@ function deliveryChecklistContent() {
   return '<p>Delivery is part of the customer experience. Even when your product is excellent, unclear delivery information can create doubt before purchase and frustration after checkout.</p><h2>Define your delivery zones</h2><p>List where you deliver, how long it takes, and whether pricing changes by location. Start with areas you can serve reliably, then expand.</p><h2>Set packaging standards</h2><p>Good packaging protects the product and reinforces your brand. Decide what every order should include before volume increases.</p><h2>Choose courier partners carefully</h2><p>Compare speed, reliability, communication, and cost. The cheapest option is not always best if it creates repeated support problems.</p><h2>Communicate after purchase</h2><p>Customers want to know when their order has been received, dispatched, and delivered. Simple updates reduce anxiety and support messages.</p><h2>Write a clear return policy</h2><p>Explain what can be returned, the timeframe, and the condition required. Clear policies protect both the customer and your business.</p>';
 }
 
-async function readJson(req) {
-  const chunks = [];
-  for await (const chunk of req) chunks.push(chunk);
-  return JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
-}
-
-function isAuthed(req) {
-  return String(req.headers.cookie || '').includes('nile_admin_session=local-dev-session');
-}
-
 function sendHtml(res, body, status = 200) {
-  send(res, body, status, 'text/html; charset=utf-8');
+  send(res, injectRuntimeConfig(body), status, 'text/html; charset=utf-8');
 }
 
 function sendJson(res, body, status = 200) {
@@ -605,11 +543,25 @@ function sendXml(res, body, status = 200) {
 }
 
 function send(res, body, status, type) {
-  res.writeHead(status, { 'Content-Type': type, 'Cache-Control': 'no-store' });
+  res.statusCode = status;
+  res.setHeader('Content-Type', type);
+  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
   res.end(body);
 }
 
-function makeSlug(value = '') {
+function redirect(res, location, status = 308) {
+  res.statusCode = status;
+  res.setHeader('Location', location);
+  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  res.end(`Redirecting to ${location}`);
+}
+
+function shouldRedirectToPrimaryHost(host) {
+  if (!host || host === primaryHost || host.startsWith('localhost') || host.startsWith('127.0.0.1')) return false;
+  return host === 'usenile.co' || host === 'nile.ng' || host === 'www.nile.ng';
+}
+
+function slugify(value = '') {
   return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
@@ -622,14 +574,15 @@ function formatDate(value) {
 }
 
 function escapeHtml(value = '') {
-  return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
+  return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
 }
 
 function escapeAttribute(value = '') {
   return escapeHtml(value).replaceAll('`', '&#096;');
+}
+
+function injectRuntimeConfig(html) {
+  if (!gaMeasurementId || !html.includes('</head>')) return html;
+  const config = `<script>window.__NILE_GA_MEASUREMENT_ID__=${JSON.stringify(gaMeasurementId)};</script>`;
+  return html.replace('</head>', `    ${config}\n  </head>`);
 }

@@ -1,4 +1,4 @@
-const measurementId = import.meta.env?.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+const measurementId = getMeasurementId();
 const allowedEvents = new Set([
   'pricing_click',
   'get_started_click',
@@ -86,4 +86,10 @@ function inferClickEvent(href, text, element) {
   if (href.includes('app.nile.ng') || text.includes('start building') || text.includes('get started')) return 'get_started_click';
   if (text.includes('download') || element.closest?.('.app-downloads-section')) return 'app_download_click';
   return '';
+}
+
+function getMeasurementId() {
+  const runtimeId = typeof window !== 'undefined' ? window.__NILE_GA_MEASUREMENT_ID__ : '';
+  const buildId = import.meta.env?.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+  return runtimeId || buildId || '';
 }
