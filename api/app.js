@@ -1,112 +1,187 @@
-import { readFile } from 'node:fs/promises';
-import { extname, join } from 'node:path';
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readFile } from "node:fs/promises";
+import { extname, join } from "node:path";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const rootDir = dirname(dirname(fileURLToPath(import.meta.url)));
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.usenile.co';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.usenile.co";
 const primaryHost = new URL(siteUrl).host;
-const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || '';
-const adminEmail = process.env.ADMIN_EMAIL || 'admin@nile.ng';
-const adminPassword = process.env.ADMIN_PASSWORD || 'NileAdmin2026!';
-const sessionCookie = 'nile_admin_session=local-dev-session';
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+const adminEmail = process.env.ADMIN_EMAIL || "admin@nile.ng";
+const adminPassword = process.env.ADMIN_PASSWORD || "NileAdmin2026!";
+const sessionCookie = "nile_admin_session=local-dev-session";
 
 let articles = seedArticles();
 const categories = [
-  { name: 'Online Business', slug: 'online-business', description: 'Practical launch guides for Nigerian founders building online.' },
-  { name: 'Websites', slug: 'websites', description: 'How to turn a business idea into a trusted digital storefront.' },
-  { name: 'Pricing', slug: 'pricing', description: 'Cost guides and budgeting advice for business owners.' },
-  { name: 'Payments', slug: 'payments', description: 'Checkout, payment recovery, and conversion confidence.' },
-  { name: 'Fulfillment', slug: 'fulfillment', description: 'Shipping, delivery, and post-purchase operations.' }
+  {
+    name: "Online Business",
+    slug: "online-business",
+    description:
+      "Practical launch guides for Nigerian founders building online.",
+  },
+  {
+    name: "Websites",
+    slug: "websites",
+    description:
+      "How to turn a business idea into a trusted digital storefront.",
+  },
+  {
+    name: "Pricing",
+    slug: "pricing",
+    description: "Cost guides and budgeting advice for business owners.",
+  },
+  {
+    name: "Payments",
+    slug: "payments",
+    description: "Checkout, payment recovery, and conversion confidence.",
+  },
+  {
+    name: "Fulfillment",
+    slug: "fulfillment",
+    description: "Shipping, delivery, and post-purchase operations.",
+  },
+  {
+    name: "Theme Documentation",
+    slug: "theme-documentation",
+    description: "Theme Documentation on how to setup your theme",
+  },
 ];
 
 const mimeTypes = {
-  '.css': 'text/css; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8',
-  '.svg': 'image/svg+xml',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg',
-  '.html': 'text/html; charset=utf-8',
-  '.txt': 'text/plain; charset=utf-8',
-  '.xml': 'application/xml; charset=utf-8'
+  ".css": "text/css; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".html": "text/html; charset=utf-8",
+  ".txt": "text/plain; charset=utf-8",
+  ".xml": "application/xml; charset=utf-8",
 };
 
 const cleanHtmlPages = new Set([
-  'about',
-  'ai',
-  'careers',
-  'contact',
-  'cookies',
-  'developers',
-  'dpa',
-  'knowledge',
-  'merchant-agreement',
-  'pricing',
-  'privacy',
-  'refund-policy',
-  'samples',
-  'security',
-  'sla',
-  'solutions',
-  'team',
-  'terms'
+  "about",
+  "ai",
+  "careers",
+  "contact",
+  "cookies",
+  "developers",
+  "dpa",
+  "knowledge",
+  "merchant-agreement",
+  "pricing",
+  "privacy",
+  "refund-policy",
+  "samples",
+  "security",
+  "sla",
+  "solutions",
+  "team",
+  "terms",
 ]);
 
 export default async function handler(req, res) {
   try {
     const url = new URL(req.url, siteUrl);
-    const method = req.method === 'HEAD' ? 'GET' : req.method;
-    const requestHost = String(req.headers.host || '').toLowerCase();
+    const method = req.method === "HEAD" ? "GET" : req.method;
+    const requestHost = String(req.headers.host || "").toLowerCase();
 
-    if (method === 'GET' && shouldRedirectToPrimaryHost(requestHost)) {
+    if (method === "GET" && shouldRedirectToPrimaryHost(requestHost)) {
       return redirect(res, `${siteUrl}${url.pathname}${url.search}`);
     }
 
-    if (method === 'GET' && url.pathname === '/healthz') return sendText(res, 'ok');
-    if (method === 'GET' && url.pathname === '/robots.txt') return sendText(res, `User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: ${siteUrl}/sitemap.xml`);
-    if (method === 'GET' && url.pathname === '/sitemap.xml') return sendXml(res, sitemapXml());
-    if (method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) return sendHtml(res, await readHtml('index.html'));
-    if (method === 'GET' && url.pathname === '/admin') return sendHtml(res, await readHtml('admin.html'));
-    if (method === 'GET' && url.pathname === '/blog') return sendHtml(res, await readHtml('blog.html'));
-    if (method === 'GET' && url.pathname.startsWith('/blog/category/')) return sendHtml(res, await readHtml('blog.html'));
-    if (method === 'GET' && url.pathname.startsWith('/blog/')) return sendArticlePage(res, url.pathname.split('/').pop());
-    if (method === 'GET' && url.pathname.endsWith('.html')) return sendHtml(res, await readHtml(url.pathname.slice(1)));
-    if (method === 'GET' && cleanHtmlPages.has(url.pathname.slice(1))) return sendHtml(res, await readHtml(`${url.pathname.slice(1)}.html`));
-    if (method === 'GET' && (url.pathname.startsWith('/src/') || url.pathname.startsWith('/public/'))) return sendStatic(res, url.pathname.slice(1));
+    if (method === "GET" && url.pathname === "/healthz")
+      return sendText(res, "ok");
+    if (method === "GET" && url.pathname === "/robots.txt")
+      return sendText(
+        res,
+        `User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: ${siteUrl}/sitemap.xml`,
+      );
+    if (method === "GET" && url.pathname === "/sitemap.xml")
+      return sendXml(res, sitemapXml());
+    if (
+      method === "GET" &&
+      (url.pathname === "/" || url.pathname === "/index.html")
+    )
+      return sendHtml(res, await readHtml("index.html"));
+    if (method === "GET" && url.pathname === "/admin")
+      return sendHtml(res, await readHtml("admin.html"));
+    if (method === "GET" && url.pathname === "/blog")
+      return sendHtml(res, await readHtml("blog.html"));
+    if (method === "GET" && url.pathname.startsWith("/blog/category/"))
+      return sendHtml(res, await readHtml("blog.html"));
+    if (method === "GET" && url.pathname.startsWith("/blog/"))
+      return sendArticlePage(res, url.pathname.split("/").pop());
+    if (method === "GET" && url.pathname.endsWith(".html"))
+      return sendHtml(res, await readHtml(url.pathname.slice(1)));
+    if (method === "GET" && cleanHtmlPages.has(url.pathname.slice(1)))
+      return sendHtml(res, await readHtml(`${url.pathname.slice(1)}.html`));
+    if (
+      method === "GET" &&
+      (url.pathname.startsWith("/src/") || url.pathname.startsWith("/public/"))
+    )
+      return sendStatic(res, url.pathname.slice(1));
 
-    if (url.pathname === '/api/auth/login' && method === 'POST') return login(req, res);
-    if (url.pathname === '/api/auth/logout' && method === 'POST') return logout(res);
-    if (url.pathname === '/api/auth/me' && method === 'GET') return me(req, res);
-    if (url.pathname === '/api/articles' && method === 'GET') return apiArticles(res, url);
-    if (url.pathname.startsWith('/api/articles/') && method === 'GET') return apiArticle(res, url.pathname.split('/').pop());
-    if (url.pathname === '/api/categories' && method === 'GET') return apiCategories(res);
+    if (url.pathname === "/api/auth/login" && method === "POST")
+      return login(req, res);
+    if (url.pathname === "/api/auth/logout" && method === "POST")
+      return logout(res);
+    if (url.pathname === "/api/auth/me" && method === "GET")
+      return me(req, res);
+    if (url.pathname === "/api/articles" && method === "GET")
+      return apiArticles(res, url);
+    if (url.pathname.startsWith("/api/articles/") && method === "GET")
+      return apiArticle(res, url.pathname.split("/").pop());
+    if (url.pathname === "/api/categories" && method === "GET")
+      return apiCategories(res);
 
-    sendText(res, 'Not found', 404);
+    sendText(res, "Not found", 404);
   } catch (error) {
-    sendText(res, error.message || 'Server error', 500);
+    sendText(res, error.message || "Server error", 500);
   }
 }
 
 async function readHtml(file) {
-  return readFile(join(rootDir, file), 'utf8');
+  return readFile(join(rootDir, file), "utf8");
 }
 
 async function sendStatic(res, file) {
   const body = await readFile(join(rootDir, file));
-  send(res, body, 200, mimeTypes[extname(file)] || 'application/octet-stream');
+  send(res, body, 200, mimeTypes[extname(file)] || "application/octet-stream");
 }
 
 async function sendArticlePage(res, slug) {
-  const article = articles.find((item) => item.slug === slug && item.status === 'published');
-  const html = await readHtml('article.html');
-  if (!article) return sendHtml(res, html.replace('<div data-article-detail></div>', '<div data-article-detail><h1>Article not found</h1><p>This Nile Dispatch article may have moved or been unpublished.</p></div>'), 404);
+  const article = articles.find(
+    (item) => item.slug === slug && item.status === "published",
+  );
+  const html = await readHtml("article.html");
+  if (!article)
+    return sendHtml(
+      res,
+      html.replace(
+        "<div data-article-detail></div>",
+        "<div data-article-detail><h1>Article not found</h1><p>This Nile Dispatch article may have moved or been unpublished.</p></div>",
+      ),
+      404,
+    );
   article.views += 1;
   const rendered = html
-    .replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(article.seo.title)}</title>`)
-    .replace(/<meta name="description"[\s\S]*?>/i, `<meta name="description" content="${escapeAttribute(article.seo.description)}" />`)
-    .replace('</head>', `    <link rel="canonical" href="${siteUrl}/blog/${article.slug}" />\n  </head>`)
-    .replace('<div data-article-detail></div>', `<div data-article-detail data-server-rendered="true">${renderArticle(article)}</div>`);
+    .replace(
+      /<title>[\s\S]*?<\/title>/i,
+      `<title>${escapeHtml(article.seo.title)}</title>`,
+    )
+    .replace(
+      /<meta name="description"[\s\S]*?>/i,
+      `<meta name="description" content="${escapeAttribute(article.seo.description)}" />`,
+    )
+    .replace(
+      "</head>",
+      `    <link rel="canonical" href="${siteUrl}/blog/${article.slug}" />\n  </head>`,
+    )
+    .replace(
+      "<div data-article-detail></div>",
+      `<div data-article-detail data-server-rendered="true">${renderArticle(article)}</div>`,
+    );
   sendHtml(res, rendered);
 }
 
@@ -130,65 +205,101 @@ function renderArticle(article) {
 
 async function login(req, res) {
   const body = await readJson(req);
-  if (String(body.email || '').toLowerCase() !== adminEmail.toLowerCase() || String(body.password || '') !== adminPassword) {
-    return sendJson(res, { error: 'Invalid email or password' }, 401);
+  if (
+    String(body.email || "").toLowerCase() !== adminEmail.toLowerCase() ||
+    String(body.password || "") !== adminPassword
+  ) {
+    return sendJson(res, { error: "Invalid email or password" }, 401);
   }
-  res.setHeader('Set-Cookie', `${sessionCookie}; Path=/; SameSite=Lax; Secure`);
-  sendJson(res, { ok: true, email: adminEmail, role: 'admin' });
+  res.setHeader("Set-Cookie", `${sessionCookie}; Path=/; SameSite=Lax; Secure`);
+  sendJson(res, { ok: true, email: adminEmail, role: "admin" });
 }
 
 function logout(res) {
-  res.setHeader('Set-Cookie', 'nile_admin_session=; Path=/; Max-Age=0');
+  res.setHeader("Set-Cookie", "nile_admin_session=; Path=/; Max-Age=0");
   sendJson(res, { ok: true });
 }
 
 function me(req, res) {
-  if (!String(req.headers.cookie || '').includes('nile_admin_session=local-dev-session')) return sendJson(res, { error: 'Authentication required' }, 401);
-  sendJson(res, { email: adminEmail, role: 'admin' });
+  if (
+    !String(req.headers.cookie || "").includes(
+      "nile_admin_session=local-dev-session",
+    )
+  )
+    return sendJson(res, { error: "Authentication required" }, 401);
+  sendJson(res, { email: adminEmail, role: "admin" });
 }
 
 function apiArticles(res, url) {
-  const category = url.searchParams.get('category') || '';
+  const category = url.searchParams.get("category") || "";
   const data = articles
-    .filter((article) => article.status === 'published')
+    .filter((article) => article.status === "published")
     .filter((article) => !category || article.categorySlug === category)
     .map(publicArticle);
   sendJson(res, { articles: data });
 }
 
 function apiArticle(res, slug) {
-  const article = articles.find((item) => item.slug === slug && item.status === 'published');
-  if (!article) return sendJson(res, { error: 'Article not found' }, 404);
+  const article = articles.find(
+    (item) => item.slug === slug && item.status === "published",
+  );
+  if (!article) return sendJson(res, { error: "Article not found" }, 404);
   article.views += 1;
   sendJson(res, { article: publicArticle(article) });
 }
 
 function apiCategories(res) {
   const counts = new Map();
-  articles.forEach((article) => counts.set(article.categorySlug, (counts.get(article.categorySlug) || 0) + 1));
-  sendJson(res, { categories: categories.map((category) => ({ ...category, count: counts.get(category.slug) || 0 })) });
+  articles.forEach((article) =>
+    counts.set(
+      article.categorySlug,
+      (counts.get(article.categorySlug) || 0) + 1,
+    ),
+  );
+  sendJson(res, {
+    categories: categories.map((category) => ({
+      ...category,
+      count: counts.get(category.slug) || 0,
+    })),
+  });
 }
 
 async function readJson(req) {
   const chunks = [];
   for await (const chunk of req) chunks.push(chunk);
-  return JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
+  return JSON.parse(Buffer.concat(chunks).toString("utf8") || "{}");
 }
 
 function publicArticle(article) {
   return {
     ...article,
     id: article.id,
-    readingMinutes: Math.max(2, Math.ceil(stripHtml(article.content).split(/\s+/).length / 220)),
-    canonical: `${siteUrl}/blog/${article.slug}`
+    readingMinutes: Math.max(
+      2,
+      Math.ceil(stripHtml(article.content).split(/\s+/).length / 220),
+    ),
+    canonical: `${siteUrl}/blog/${article.slug}`,
   };
 }
 
 function sitemapXml() {
-  const articleUrls = articles.map((article) => `<url><loc>${siteUrl}/blog/${article.slug}</loc><lastmod>${article.updatedAt}</lastmod></url>`).join('');
-  const pages = ['/', '/solutions', '/pricing', '/blog', '/knowledge', '/about', '/contact']
+  const articleUrls = articles
+    .map(
+      (article) =>
+        `<url><loc>${siteUrl}/blog/${article.slug}</loc><lastmod>${article.updatedAt}</lastmod></url>`,
+    )
+    .join("");
+  const pages = [
+    "/",
+    "/solutions",
+    "/pricing",
+    "/blog",
+    "/knowledge",
+    "/about",
+    "/contact",
+  ]
     .map((path) => `<url><loc>${siteUrl}${path}</loc></url>`)
-    .join('');
+    .join("");
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages}${articleUrls}</urlset>`;
 }
 
@@ -196,105 +307,207 @@ function seedArticles() {
   const now = new Date().toISOString();
   return [
     seedArticle({
-      title: 'The Complete Guide to Starting an Online Business in Nigeria (2026)',
-      slug: 'start-online-business-nigeria-2026',
-      excerpt: 'A practical step-by-step guide for choosing an idea, launching a website, accepting payments, delivering orders, and growing an online business in Nigeria.',
-      coverImage: '/src/assets/storefront_laptop.jpg',
-      category: 'Online Business',
-      tags: ['online-business', 'nigeria', 'startup-guide'],
+      title:
+        "The Complete Guide to Starting an Online Business in Nigeria (2026)",
+      slug: "start-online-business-nigeria-2026",
+      excerpt:
+        "A practical step-by-step guide for choosing an idea, launching a website, accepting payments, delivering orders, and growing an online business in Nigeria.",
+      coverImage: "/src/assets/storefront_laptop.jpg",
+      category: "Online Business",
+      tags: ["online-business", "nigeria", "startup-guide"],
       views: 0,
       conversions: 0,
       now,
-      content: onlineBusinessGuideContent()
+      content: onlineBusinessGuideContent(),
     }),
     seedArticle({
-      title: 'Why Snapchat Ads Are the Most Underrated Marketing Channel for Nigerian Businesses',
-      slug: 'why-snapchat-ads-are-the-most-underrated-marketing-platform',
-      excerpt: 'If you are spending all your budget on Instagram and Facebook, you are missing out on one of the most powerful ad platforms today.',
-      coverImage: '/src/assets/snapchat-ads-blog.jpg',
-      category: 'Marketing',
-      tags: ['snapchat-ads', 'marketing', 'nigeria'],
+      title:
+        "Why Snapchat Ads Are the Most Underrated Marketing Channel for Nigerian Businesses",
+      slug: "why-snapchat-ads-are-the-most-underrated-marketing-platform",
+      excerpt:
+        "If you are spending all your budget on Instagram and Facebook, you are missing out on one of the most powerful ad platforms today.",
+      coverImage: "/src/assets/snapchat-ads-blog.jpg",
+      category: "Marketing",
+      tags: ["snapchat-ads", "marketing", "nigeria"],
       views: 0,
       conversions: 0,
       now,
-      content: snapchatAdsContent()
+      content: snapchatAdsContent(),
     }),
     seedArticle({
-      title: "How to Build a Website for Your Business (Complete Beginner's Guide)",
-      slug: 'build-business-website-beginners-guide',
-      excerpt: 'A beginner-friendly guide to planning, designing, launching, and improving a professional business website that customers can trust.',
-      coverImage: '/src/assets/creative_studio.jpg',
-      category: 'Websites',
-      tags: ['websites', 'beginner-guide', 'business-growth'],
+      title:
+        "How to Build a Website for Your Business (Complete Beginner's Guide)",
+      slug: "build-business-website-beginners-guide",
+      excerpt:
+        "A beginner-friendly guide to planning, designing, launching, and improving a professional business website that customers can trust.",
+      coverImage: "/src/assets/creative_studio.jpg",
+      category: "Websites",
+      tags: ["websites", "beginner-guide", "business-growth"],
       views: 0,
       conversions: 0,
       now,
-      content: businessWebsiteGuideContent()
+      content: businessWebsiteGuideContent(),
     }),
     seedArticle({
-      title: 'How Much Does a Website Cost in Nigeria? (2026 Pricing Guide)',
-      slug: 'website-cost-nigeria-2026-pricing-guide',
-      excerpt: 'A practical 2026 pricing guide for Nigerian business owners comparing landing pages, business websites, ecommerce sites, custom apps, and hidden website costs.',
-      coverImage: '/src/assets/storefront_laptop.jpg',
-      category: 'Pricing',
-      tags: ['website-pricing', 'nigeria', 'business-websites'],
+      title: "How Much Does a Website Cost in Nigeria? (2026 Pricing Guide)",
+      slug: "website-cost-nigeria-2026-pricing-guide",
+      excerpt:
+        "A practical 2026 pricing guide for Nigerian business owners comparing landing pages, business websites, ecommerce sites, custom apps, and hidden website costs.",
+      coverImage: "/src/assets/storefront_laptop.jpg",
+      category: "Pricing",
+      tags: ["website-pricing", "nigeria", "business-websites"],
       views: 0,
       conversions: 0,
       now,
-      content: websiteCostGuideContent()
+      content: websiteCostGuideContent(),
     }),
     seedArticle({
-      title: 'Website vs Instagram Business Page: Which Is Better for Your Business?',
-      slug: 'website-vs-instagram-business-page',
-      excerpt: 'A practical comparison of Instagram business pages and websites, and how growing businesses can use both to attract, convert, and retain customers.',
-      coverImage: '/src/assets/fashion_founder.jpg',
-      category: 'Websites',
-      tags: ['websites', 'instagram', 'social-commerce'],
+      title:
+        "Website vs Instagram Business Page: Which Is Better for Your Business?",
+      slug: "website-vs-instagram-business-page",
+      excerpt:
+        "A practical comparison of Instagram business pages and websites, and how growing businesses can use both to attract, convert, and retain customers.",
+      coverImage: "/src/assets/fashion_founder.jpg",
+      category: "Websites",
+      tags: ["websites", "instagram", "social-commerce"],
       views: 0,
       conversions: 0,
       now,
-      content: websiteVsInstagramContent()
+      content: websiteVsInstagramContent(),
     }),
     seedArticle({
-      title: 'Why your Nigerian business needs a website, even if Instagram is working',
-      slug: 'why-nigerian-business-needs-website',
-      excerpt: 'Social media can help customers discover you, but a website gives your brand trust, ownership, search visibility, and a better buying experience.',
-      coverImage: '/src/assets/fashion_founder.jpg',
-      category: 'Websites',
-      tags: ['websites', 'trust', 'social-commerce'],
+      title:
+        "Why your Nigerian business needs a website, even if Instagram is working",
+      slug: "why-nigerian-business-needs-website",
+      excerpt:
+        "Social media can help customers discover you, but a website gives your brand trust, ownership, search visibility, and a better buying experience.",
+      coverImage: "/src/assets/fashion_founder.jpg",
+      category: "Websites",
+      tags: ["websites", "trust", "social-commerce"],
       views: 0,
       conversions: 0,
       now,
-      content: websiteTrustContent()
+      content: websiteTrustContent(),
     }),
     seedArticle({
-      title: 'How to set up online payments customers can trust',
-      slug: 'online-payment-setup-nigeria',
-      excerpt: 'A simple payment checklist for Nigerian businesses that want fewer failed orders, clearer checkout flows, and more confident customers.',
-      coverImage: '/src/assets/shopping_basket.jpg',
-      category: 'Payments',
-      tags: ['payments', 'checkout', 'conversion'],
+      title: "How to set up online payments customers can trust",
+      slug: "online-payment-setup-nigeria",
+      excerpt:
+        "A simple payment checklist for Nigerian businesses that want fewer failed orders, clearer checkout flows, and more confident customers.",
+      coverImage: "/src/assets/shopping_basket.jpg",
+      category: "Payments",
+      tags: ["payments", "checkout", "conversion"],
       views: 0,
       conversions: 0,
       now,
-      content: paymentSetupContent()
+      content: paymentSetupContent(),
     }),
     seedArticle({
-      title: 'A beginner-friendly delivery checklist for online sellers',
-      slug: 'delivery-checklist-online-sellers-nigeria',
-      excerpt: 'What to decide before your first orders start coming in: delivery zones, pricing, timelines, packaging, returns, and customer updates.',
-      coverImage: '/src/assets/logistics_truck.jpg',
-      category: 'Fulfillment',
-      tags: ['delivery', 'fulfillment', 'operations'],
+      title: "A beginner-friendly delivery checklist for online sellers",
+      slug: "delivery-checklist-online-sellers-nigeria",
+      excerpt:
+        "What to decide before your first orders start coming in: delivery zones, pricing, timelines, packaging, returns, and customer updates.",
+      coverImage: "/src/assets/logistics_truck.jpg",
+      category: "Fulfillment",
+      tags: ["delivery", "fulfillment", "operations"],
       views: 0,
       conversions: 0,
       now,
-      content: deliveryChecklistContent()
-    })
+      content: deliveryChecklistContent(),
+    }),
+    seedArticle({
+      title: "Goblin Theme Documentation",
+      slug: "goblin-theme-documentation",
+      excerpt:
+        "A complete guide on how to setup your the Goblin theme, add hero images, logos, social handles, and payment methods.",
+      coverImage: "/src/assets/theme_goblin_theme.jpg",
+      category: "Theme Documentation",
+      tags: ["documentation", "theme", "setup"],
+      views: 0,
+      conversions: 0,
+      now,
+      content: goblinThemeDocContent(),
+    }),
+    seedArticle({
+      title: "Josa Theme Documentation",
+      slug: "josa-theme-documentation",
+      excerpt:
+        "A complete guide on how to setup your the Josa theme, logos, social handles, and payment methods.",
+      coverImage: "/src/assets/theme_josa_theme.jpg",
+      category: "Theme Documentation",
+      tags: ["documentation", "theme", "setup"],
+      views: 0,
+      conversions: 0,
+      now,
+      content: josaThemeDocContent(),
+    }),
+    seedArticle({
+      title: "Nubia Theme Documentation",
+      slug: "nubia-theme-documentation",
+      excerpt:
+        "A complete guide on how to setup your the Nubia theme, logos, social handles, and payment methods.",
+      coverImage: "/src/assets/theme_nubia_theme.webp",
+      category: "Theme Documentation",
+      tags: ["documentation", "theme", "setup"],
+      views: 0,
+      conversions: 0,
+      now,
+      content: nubiaThemeDocContent(),
+    }),
+    seedArticle({
+      title: "Luna Theme Documentation",
+      slug: "luna-theme-documentation",
+      excerpt:
+        "A complete guide on how to setup your the Luna theme, logos, social handles, and payment methods.",
+      coverImage: "/src/assets/theme_luna_theme.webp",
+      category: "Theme Documentation",
+      tags: ["documentation", "theme", "setup"],
+      views: 0,
+      conversions: 0,
+      now,
+      content: lunaThemeDocContent(),
+    }),
+    seedArticle({
+      title: "Badzy Theme Documentation",
+      slug: "badzy-theme-documentation",
+      excerpt:
+        "A complete guide on how to setup your the Badzy theme, logos, social handles, and payment methods.",
+      coverImage: "/src/assets/theme_badzy_theme.jpg",
+      category: "Theme Documentation",
+      tags: ["documentation", "theme", "setup"],
+      views: 0,
+      conversions: 0,
+      now,
+      content: badzyThemeDocContent(),
+    }),
+    seedArticle({
+      title: "Kupid Theme Documentation",
+      slug: "kupid-theme-documentation",
+      excerpt:
+        "A complete guide on how to setup your the Kupid theme, logos, social handles, and payment methods.",
+      coverImage: "/src/assets/theme_kupid_theme.webp",
+      category: "Theme Documentation",
+      tags: ["documentation", "theme", "setup"],
+      views: 0,
+      conversions: 0,
+      now,
+      content: kupidThemeDocContent(),
+    }),
   ];
 }
 
-function seedArticle({ title, slug, excerpt, coverImage, category, tags, views, conversions, now, content }) {
+function seedArticle({
+  title,
+  slug,
+  excerpt,
+  coverImage,
+  category,
+  tags,
+  views,
+  conversions,
+  now,
+  content,
+}) {
   return {
     id: slug,
     title,
@@ -304,15 +517,15 @@ function seedArticle({ title, slug, excerpt, coverImage, category, tags, views, 
     category,
     categorySlug: slugify(category),
     tags,
-    author: { name: 'Nile Editorial', role: 'Commerce infrastructure team' },
+    author: { name: "Nile Editorial", role: "Commerce infrastructure team" },
     seo: { title: `${title} | Nile`, description: excerpt },
     content,
-    status: 'published',
+    status: "published",
     publishedAt: now,
     createdAt: now,
     updatedAt: now,
     views,
-    conversions
+    conversions,
   };
 }
 
@@ -527,76 +740,98 @@ function websiteVsInstagramContent() {
 }
 
 function websiteTrustContent() {
-  return '<p>Instagram, TikTok, and WhatsApp are powerful discovery channels, but they should not be the only home for your business. A website gives customers a stable place to understand your offer, confirm your legitimacy, and take action.</p><h2>You own the customer journey</h2><p>On social media, your content competes with everything else in the feed. On your website, the customer can focus on your products, policies, reviews, and checkout steps without distraction.</p><h2>Search creates long-term demand</h2><p>People search Google for products, prices, delivery options, and business names. A properly structured website gives your brand a chance to appear when buyers are already looking.</p><h2>Trust pages matter</h2><p>Include About, Contact, Terms, Privacy, Refund Policy, and FAQs. These pages answer the questions cautious customers ask before paying online.</p><h2>Use social media and your website together</h2><p>Let social platforms create awareness, then send serious buyers to your website to browse, order, and pay. That combination is stronger than either channel alone.</p>';
+  return "<p>Instagram, TikTok, and WhatsApp are powerful discovery channels, but they should not be the only home for your business. A website gives customers a stable place to understand your offer, confirm your legitimacy, and take action.</p><h2>You own the customer journey</h2><p>On social media, your content competes with everything else in the feed. On your website, the customer can focus on your products, policies, reviews, and checkout steps without distraction.</p><h2>Search creates long-term demand</h2><p>People search Google for products, prices, delivery options, and business names. A properly structured website gives your brand a chance to appear when buyers are already looking.</p><h2>Trust pages matter</h2><p>Include About, Contact, Terms, Privacy, Refund Policy, and FAQs. These pages answer the questions cautious customers ask before paying online.</p><h2>Use social media and your website together</h2><p>Let social platforms create awareness, then send serious buyers to your website to browse, order, and pay. That combination is stronger than either channel alone.</p>";
 }
 
 function paymentSetupContent() {
-  return '<p>Payment friction can turn interested buyers into abandoned orders. Your payment setup should make the next step obvious, secure, and easy to complete on mobile.</p><h2>Offer familiar options</h2><p>Many Nigerian customers expect transfer, card, and mobile-friendly payment options. Make the available methods clear before checkout so buyers are not surprised.</p><h2>Confirm orders quickly</h2><p>After payment, customers should know what happens next. Show a confirmation message, send order details, and explain delivery timing.</p><h2>Reduce failed-payment confusion</h2><p>If a payment fails, give customers a clear retry path or support contact. Confusion at this stage can cost the sale.</p><h2>Track what works</h2><p>Review completed orders, failed attempts, and customer questions. The best payment setup improves as you learn where buyers hesitate.</p>';
+  return "<p>Payment friction can turn interested buyers into abandoned orders. Your payment setup should make the next step obvious, secure, and easy to complete on mobile.</p><h2>Offer familiar options</h2><p>Many Nigerian customers expect transfer, card, and mobile-friendly payment options. Make the available methods clear before checkout so buyers are not surprised.</p><h2>Confirm orders quickly</h2><p>After payment, customers should know what happens next. Show a confirmation message, send order details, and explain delivery timing.</p><h2>Reduce failed-payment confusion</h2><p>If a payment fails, give customers a clear retry path or support contact. Confusion at this stage can cost the sale.</p><h2>Track what works</h2><p>Review completed orders, failed attempts, and customer questions. The best payment setup improves as you learn where buyers hesitate.</p>";
 }
 
 function deliveryChecklistContent() {
-  return '<p>Delivery is part of the customer experience. Even when your product is excellent, unclear delivery information can create doubt before purchase and frustration after checkout.</p><h2>Define your delivery zones</h2><p>List where you deliver, how long it takes, and whether pricing changes by location. Start with areas you can serve reliably, then expand.</p><h2>Set packaging standards</h2><p>Good packaging protects the product and reinforces your brand. Decide what every order should include before volume increases.</p><h2>Choose courier partners carefully</h2><p>Compare speed, reliability, communication, and cost. The cheapest option is not always best if it creates repeated support problems.</p><h2>Communicate after purchase</h2><p>Customers want to know when their order has been received, dispatched, and delivered. Simple updates reduce anxiety and support messages.</p><h2>Write a clear return policy</h2><p>Explain what can be returned, the timeframe, and the condition required. Clear policies protect both the customer and your business.</p>';
+  return "<p>Delivery is part of the customer experience. Even when your product is excellent, unclear delivery information can create doubt before purchase and frustration after checkout.</p><h2>Define your delivery zones</h2><p>List where you deliver, how long it takes, and whether pricing changes by location. Start with areas you can serve reliably, then expand.</p><h2>Set packaging standards</h2><p>Good packaging protects the product and reinforces your brand. Decide what every order should include before volume increases.</p><h2>Choose courier partners carefully</h2><p>Compare speed, reliability, communication, and cost. The cheapest option is not always best if it creates repeated support problems.</p><h2>Communicate after purchase</h2><p>Customers want to know when their order has been received, dispatched, and delivered. Simple updates reduce anxiety and support messages.</p><h2>Write a clear return policy</h2><p>Explain what can be returned, the timeframe, and the condition required. Clear policies protect both the customer and your business.</p>";
 }
 
 function sendHtml(res, body, status = 200) {
-  send(res, injectRuntimeConfig(body), status, 'text/html; charset=utf-8');
+  send(res, injectRuntimeConfig(body), status, "text/html; charset=utf-8");
 }
 
 function sendJson(res, body, status = 200) {
-  send(res, JSON.stringify(body), status, 'application/json; charset=utf-8');
+  send(res, JSON.stringify(body), status, "application/json; charset=utf-8");
 }
 
 function sendText(res, body, status = 200) {
-  send(res, body, status, 'text/plain; charset=utf-8');
+  send(res, body, status, "text/plain; charset=utf-8");
 }
 
 function sendXml(res, body, status = 200) {
-  send(res, body, status, 'application/xml; charset=utf-8');
+  send(res, body, status, "application/xml; charset=utf-8");
 }
 
 function send(res, body, status, type) {
   res.statusCode = status;
-  res.setHeader('Content-Type', type);
-  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  res.setHeader("Content-Type", type);
+  res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
   res.end(body);
 }
 
 function redirect(res, location, status = 308) {
   res.statusCode = status;
-  res.setHeader('Location', location);
-  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  res.setHeader("Location", location);
+  res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
   res.end(`Redirecting to ${location}`);
 }
 
 function shouldRedirectToPrimaryHost(host) {
-  if (!host || host === primaryHost || host.startsWith('localhost') || host.startsWith('127.0.0.1')) return false;
-  return host === 'usenile.co' || host === 'nile.ng' || host === 'www.nile.ng';
+  if (
+    !host ||
+    host === primaryHost ||
+    host.startsWith("localhost") ||
+    host.startsWith("127.0.0.1")
+  )
+    return false;
+  return host === "usenile.co" || host === "nile.ng" || host === "www.nile.ng";
 }
 
-function slugify(value = '') {
-  return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+function slugify(value = "") {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
-function stripHtml(value = '') {
-  return value.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+function stripHtml(value = "") {
+  return value
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function formatDate(value) {
-  return new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(value));
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(value));
 }
 
-function escapeHtml(value = '') {
-  return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+function escapeHtml(value = "") {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
-function escapeAttribute(value = '') {
-  return escapeHtml(value).replaceAll('`', '&#096;');
+function escapeAttribute(value = "") {
+  return escapeHtml(value).replaceAll("`", "&#096;");
 }
 
 function injectRuntimeConfig(html) {
-  if (!gaMeasurementId || !html.includes('</head>')) return html;
+  if (!gaMeasurementId || !html.includes("</head>")) return html;
   const config = `<script>window.__NILE_GA_MEASUREMENT_ID__=${JSON.stringify(gaMeasurementId)};</script>`;
-  return html.replace('</head>', `    ${config}\n  </head>`);
+  return html.replace("</head>", `    ${config}\n  </head>`);
 }
 
 function snapchatAdsContent() {
@@ -642,5 +877,1666 @@ function snapchatAdsContent() {
     <p>The best marketing platform isn't always the most popular one. It's the platform that delivers the best return on your investment.</p>
     <p>Snapchat Ads remain one of the most overlooked opportunities for businesses that want to reach younger audiences with engaging, mobile-first advertising.</p>
     <p>If you've never considered Snapchat before, now might be the perfect time to test it.</p>
+  `;
+}
+
+function kupidThemeDocContent() {
+  return `
+  <div class="container">
+      <div
+        class="table-of-contents"
+        style="
+          background-color: #f8f9fa;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 2rem;
+        "
+      >
+        <h2 style="margin-top: 0; font-size: 1.5rem; color: #333">
+          Table of Contents
+        </h2>
+        <ul style="list-style: none; padding-left: 0; margin-bottom: 0">
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s1"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >1. How to Add Hero Images</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s2"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >2. How to Add the Store Logo Image on the Navigation Bar</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s3"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >3. How to Add Your Social Handles</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s4"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >4. How to Add Pages to Your Store</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s5"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >5. How to Setup WhatsApp Floating Button</a
+            >
+          </li>
+          <li>
+            <a
+              href="#s6"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >6. How to Setup Payment Method</a
+            >
+          </li>
+        </ul>
+      </div>
+      <section id="s1" style="padding: 0">
+        <h2>How to Add Hero Images</h2>
+        <ol>
+          <li class="step">
+            Go to <strong>Themes</strong> on the sidebar on the merchant
+            dashboard.
+          </li>
+          <img
+            src="/src/assets/theme_theme_icon.png"
+            alt="Add Hero Image"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Open Website Builder</strong> on the bottom right
+            corner of the Theme page.
+          </li>
+          <img
+            src="/src/assets/theme_web_builder.png"
+            alt="theme builder icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Hero</strong> under Add Section.
+          </li>
+          <img
+            src="/src/assets/theme_hero_menu.png"
+            alt="Hero Image Menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Add Image</strong> on the right side.
+          </li>
+          <img
+            src="/src/assets/theme_add_hero_image.png"
+            alt="Add Hero Image"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Select the image you want to add as your Hero image. The first image
+            will be used as the desktop hero image and as a fallback for mobile.
+            If you add a second image, it becomes the mobile hero image.
+          </li>
+          <li class="step">Click on <strong>Publish</strong> to save.</li>
+        </ol>
+      </section>
+      <section id="s2" style="padding: 0">
+        <h2>How to Add the Store Logo Image on the Navigation Bar</h2>
+        <ol>
+          <li class="step">
+            Click on <strong>Store Information</strong> on the sidebar.
+          </li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Edit Store Information</strong>.
+          </li>
+          <img
+            src="/src/assets/theme_add_store_icon.png"
+            alt="add store icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on the image to select the image you want to use as your store
+            logo.
+          </li>
+          <li class="step">
+            After the image is uploaded, click
+            <strong>Save Store Settings</strong>.
+          </li>
+        </ol>
+      </section>
+      <section id="s3" style="padding: 0">
+        <h2>How to Add Your Social Handles</h2>
+        <ol>
+          <li class="step">Click on <strong>Store Information</strong>.</li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Edit Store Information</strong>.
+          </li>
+          <li class="step">
+            Scroll down to the <strong>Social Connections</strong> section.
+          </li>
+          <li class="step">Enter your business social media profile links.</li>
+          <img
+            src="/src/assets/theme_social_connection.png"
+            alt="social Connections"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Note Only links added here will appear in the website footer.
+          </li>
+          <li class="step">Click <strong>Save Store Settings</strong>.</li>
+        </ol>
+      </section>
+      <section id="s4" style="padding: 0">
+        <h2>How to Add Pages to Your Store</h2>
+        <ol>
+          <li class="step">Click on <strong>Pages</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_pages_menu.png"
+            alt="store pages"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Click <strong>Add New Page</strong>.</li>
+          <img
+            src="/src/assets/theme_add_pages.png"
+            alt="add pages"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enter the page name and click
+            <strong>Initialize Page Design</strong>.
+          </li>
+          <img
+            src="/src/assets/theme_initialize_page_design.png"
+            alt="Initialize Page"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Type the page content and click <strong>Publish Changes</strong>.
+          </li>
+          <li class="step">
+            You can create as many pages as needed; they automatically appear in
+            the footer.
+          </li>
+        </ol>
+      </section>
+      <section id="s5" style="padding: 0">
+        <h2>How to Setup WhatsApp Floating Button</h2>
+        <ol>
+          <li class="step">Click <strong>Store Information</strong>.</li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enter a WhatsApp number and save the store settings.
+          </li>
+          <img
+            src="/src/assets/theme_whatsapp_number.png"
+            alt="whatsapp number"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Go to <strong>Tools</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_tool_menu.png"
+            alt="tool menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Open <strong>Storefront Contact</strong> and enable the WhatsApp
+            Floating Button.
+          </li>
+          <img
+            src="/src/assets/theme_whatapp_floating_number.png"
+            alt="WhatsApp Floating Icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+        </ol>
+      </section>
+      <section id="s6" style="padding: 0">
+        <h2>How to Setup Payment Method</h2>
+        <ol>
+          <li class="step">Click <strong>Payments</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_payment_menu.png"
+            alt="payment menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Click <strong>Set Payment Method</strong>.</li>
+          <img
+            src="/src/assets/theme_configure_payment_method.png"
+            alt="set payment method"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enable card payments, bank transfers, payment on delivery, or any
+            combination of these methods.
+          </li>
+        </ol>
+      </section>
+    </div>
+  
+  `;
+}
+
+function badzyThemeDocContent() {
+  return `
+   <div class="container">
+      <div
+        class="table-of-contents"
+        style="
+          background-color: #f8f9fa;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 2rem;
+        "
+      >
+        <h2 style="margin-top: 0; font-size: 1.5rem; color: #333">
+          Table of Contents
+        </h2>
+        <ul style="list-style: none; padding-left: 0; margin-bottom: 0">
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s1"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >1. How to Add Hero Images</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s2"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >2. How to Add the Store Logo Image on the Navigation Bar</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s3"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >3. How to Add Your Social Handles</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s4"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >4. How to Add Pages to Your Store</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s5"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >5. How to Setup WhatsApp Floating Button</a
+            >
+          </li>
+          <li>
+            <a
+              href="#s6"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >6. How to Setup Payment Method</a
+            >
+          </li>
+        </ul>
+      </div>
+      <section id="s1" style="padding: 0">
+        <h2>How to Add Hero Images</h2>
+        <ol>
+          <li class="step">
+            Go to <strong>Themes</strong> on the sidebar on the merchant
+            dashboard.
+          </li>
+          <img
+            src="/src/assets/theme_theme_icon.png"
+            alt="Add Hero Image"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Open Website Builder</strong> on the bottom right
+            corner of the Theme page.
+          </li>
+          <img
+            src="/src/assets/theme_web_builder.png"
+            alt="theme builder icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Hero</strong> under Add Section.
+          </li>
+          <img
+            src="/src/assets/theme_hero_menu.png"
+            alt="Hero Image Menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Add Image</strong> on the right side.
+          </li>
+          <img
+            src="/src/assets/theme_add_hero_image.png"
+            alt="Add Hero Image"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Select the image you want to add as your Hero image.
+          </li>
+          <li class="step">Click on <strong>Publish</strong> to save.</li>
+        </ol>
+      </section>
+      <section id="s2" style="padding: 0">
+        <h2>How to Add the Store Logo Image on the Navigation Bar</h2>
+        <ol>
+          <li class="step">
+            Click on <strong>Store Information</strong> on the sidebar.
+          </li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Edit Store Information</strong>.
+          </li>
+          <img
+            src="/src/assets/theme_add_store_icon.png"
+            alt="add store icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on the image to select the image you want to use as your store
+            logo.
+          </li>
+          <li class="step">
+            After the image is uploaded, click
+            <strong>Save Store Settings</strong>.
+          </li>
+        </ol>
+      </section>
+      <section id="s3" style="padding: 0">
+        <h2>How to Add Your Social Handles</h2>
+        <ol>
+          <li class="step">Click on <strong>Store Information</strong>.</li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Edit Store Information</strong>.
+          </li>
+          <li class="step">
+            Scroll down to the <strong>Social Connections</strong> section.
+          </li>
+          <li class="step">Enter your business social media profile links.</li>
+          <img
+            src="/src/assets/theme_social_connection.png"
+            alt="social Connections"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Note Only links added here will appear in the website footer.
+          </li>
+          <li class="step">Click <strong>Save Store Settings</strong>.</li>
+        </ol>
+      </section>
+      <section id="s4" style="padding: 0">
+        <h2>How to Add Pages to Your Store</h2>
+        <ol>
+          <li class="step">Click on <strong>Pages</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_pages_menu.png"
+            alt="store pages"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Click <strong>Add New Page</strong>.</li>
+          <img
+            src="/src/assets/theme_add_pages.png"
+            alt="add pages"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enter the page name and click
+            <strong>Initialize Page Design</strong>.
+          </li>
+          <img
+            src="/src/assets/theme_initialize_page_design.png"
+            alt="Initialize Page"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Type the page content and click <strong>Publish Changes</strong>.
+          </li>
+          <li class="step">
+            You can create as many pages as needed; they automatically appear in
+            the footer.
+          </li>
+        </ol>
+      </section>
+      <section id="s5" style="padding: 0">
+        <h2>How to Setup WhatsApp Floating Button</h2>
+        <ol>
+          <li class="step">Click <strong>Store Information</strong>.</li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enter a WhatsApp number and save the store settings.
+          </li>
+          <img
+            src="/src/assets/theme_whatsapp_number.png"
+            alt="whatsapp number"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Go to <strong>Tools</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_tool_menu.png"
+            alt="tool menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Open <strong>Storefront Contact</strong> and enable the WhatsApp
+            Floating Button.
+          </li>
+          <img
+            src="/src/assets/theme_whatapp_floating_number.png"
+            alt="WhatsApp Floating Icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+        </ol>
+      </section>
+      <section id="s6" style="padding: 0">
+        <h2>How to Setup Payment Method</h2>
+        <ol>
+          <li class="step">Click <strong>Payments</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_payment_menu.png"
+            alt="payment menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Click <strong>Set Payment Method</strong>.</li>
+          <img
+            src="/src/assets/theme_configure_payment_method.png"
+            alt="set payment method"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enable card payments, bank transfers, payment on delivery, or any
+            combination of these methods.
+          </li>
+        </ol>
+      </section>
+    </div>
+  `;
+}
+
+function lunaThemeDocContent() {
+  return `
+   <div class="container">
+      <div
+        class="table-of-contents"
+        style="
+          background-color: #f8f9fa;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 2rem;
+        "
+      >
+        <h2 style="margin-top: 0; font-size: 1.5rem; color: #333">
+          Table of Contents
+        </h2>
+        <ul style="list-style: none; padding-left: 0; margin-bottom: 0">
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s1"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >1. How to Add Hero Images</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s2"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >2. How to Add the Store Logo Image on the Navigation Bar</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s3"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >3. How to Add Your Social Handles</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s4"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >4. How to Add Pages to Your Store</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s5"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >5. How to Setup WhatsApp Floating Button</a
+            >
+          </li>
+          <li>
+            <a
+              href="#s6"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >6. How to Setup Payment Method</a
+            >
+          </li>
+        </ul>
+      </div>
+      <section id="s1" style="padding: 0">
+        <h2>How to Add Hero Images</h2>
+        <ol>
+          <li class="step">
+            Go to <strong>Themes</strong> on the sidebar on the merchant
+            dashboard.
+          </li>
+          <img
+            src="/src/assets/theme_theme_icon.png"
+            alt="Add Hero Image"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Open Website Builder</strong> on the bottom right
+            corner of the Theme page.
+          </li>
+          <img
+            src="/src/assets/theme_web_builder.png"
+            alt="theme builder icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Hero</strong> under Add Section.
+          </li>
+          <img
+            src="/src/assets/theme_hero_menu.png"
+            alt="Hero Image Menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Add Image</strong> on the right side.
+          </li>
+          <img
+            src="/src/assets/theme_add_hero_image.png"
+            alt="Add Hero Image"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Select the image you want to add as your Hero image. The first image
+            will be used as the desktop hero image and as a fallback for mobile.
+            If you add a second image, it becomes the mobile hero image.
+          </li>
+          <li class="step">Click on <strong>Publish</strong> to save.</li>
+        </ol>
+      </section>
+      <section id="s2" style="padding: 0">
+        <h2>How to Add the Store Logo Image on the Navigation Bar</h2>
+        <ol>
+          <li class="step">
+            Click on <strong>Store Information</strong> on the sidebar.
+          </li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Edit Store Information</strong>.
+          </li>
+          <img
+            src="/src/assets/theme_add_store_icon.png"
+            alt="add store icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on the image to select the image you want to use as your store
+            logo.
+          </li>
+          <li class="step">
+            After the image is uploaded, click
+            <strong>Save Store Settings</strong>.
+          </li>
+        </ol>
+      </section>
+      <section id="s3" style="padding: 0">
+        <h2>How to Add Your Social Handles</h2>
+        <ol>
+          <li class="step">Click on <strong>Store Information</strong>.</li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Edit Store Information</strong>.
+          </li>
+          <li class="step">
+            Scroll down to the <strong>Social Connections</strong> section.
+          </li>
+          <li class="step">Enter your business social media profile links.</li>
+          <img
+            src="/src/assets/theme_social_connection.png"
+            alt="social Connections"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Note Only links added here will appear in the website footer.
+          </li>
+          <li class="step">Click <strong>Save Store Settings</strong>.</li>
+        </ol>
+      </section>
+      <section id="s4" style="padding: 0">
+        <h2>How to Add Pages to Your Store</h2>
+        <ol>
+          <li class="step">Click on <strong>Pages</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_pages_menu.png"
+            alt="store pages"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Click <strong>Add New Page</strong>.</li>
+          <img
+            src="/src/assets/theme_add_pages.png"
+            alt="add pages"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enter the page name and click
+            <strong>Initialize Page Design</strong>.
+          </li>
+          <img
+            src="/src/assets/theme_initialize_page_design.png"
+            alt="Initialize Page"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Type the page content and click <strong>Publish Changes</strong>.
+          </li>
+          <li class="step">
+            You can create as many pages as needed; they automatically appear in
+            the footer.
+          </li>
+        </ol>
+      </section>
+      <section id="s5" style="padding: 0">
+        <h2>How to Setup WhatsApp Floating Button</h2>
+        <ol>
+          <li class="step">Click <strong>Store Information</strong>.</li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enter a WhatsApp number and save the store settings.
+          </li>
+          <img
+            src="/src/assets/theme_whatsapp_number.png"
+            alt="whatsapp number"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Go to <strong>Tools</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_tool_menu.png"
+            alt="tool menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Open <strong>Storefront Contact</strong> and enable the WhatsApp
+            Floating Button.
+          </li>
+          <img
+            src="/src/assets/theme_whatapp_floating_number.png"
+            alt="WhatsApp Floating Icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+        </ol>
+      </section>
+      <section id="s6" style="padding: 0">
+        <h2>How to Setup Payment Method</h2>
+        <ol>
+          <li class="step">Click <strong>Payments</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_payment_menu.png"
+            alt="payment menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Click <strong>Set Payment Method</strong>.</li>
+          <img
+            src="/src/assets/theme_configure_payment_method.png"
+            alt="set payment method"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enable card payments, bank transfers, payment on delivery, or any
+            combination of these methods.
+          </li>
+        </ol>
+      </section>
+    </div>
+  `;
+}
+
+function nubiaThemeDocContent() {
+  return `
+    <div class="container">
+      <div
+        class="table-of-contents"
+        style="
+          background-color: #f8f9fa;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 2rem;
+        "
+      >
+        <h2 style="margin-top: 0; font-size: 1.5rem; color: #333">
+          Table of Contents
+        </h2>
+        <ul style="list-style: none; padding-left: 0; margin-bottom: 0">
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s1"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >1. How to Add Hero Images</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s2"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >2. How to Add the Store Logo Image on the Navigation Bar</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s3"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >3. How to Add Your Social Handles</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s4"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >4. How to Add Pages to Your Store</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s5"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >5. How to Setup WhatsApp Floating Button</a
+            >
+          </li>
+          <li>
+            <a
+              href="#s6"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >6. How to Setup Payment Method</a
+            >
+          </li>
+        </ul>
+      </div>
+      <section id="s1" style="padding: 0">
+        <h2>How to Add Hero Images</h2>
+        <ol>
+          <li class="step">
+            Go to <strong>Themes</strong> on the sidebar on the merchant
+            dashboard.
+          </li>
+          <img
+            src="/src/assets/theme_theme_icon.png"
+            alt="Add Hero Image"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Open Website Builder</strong> on the bottom right
+            corner of the Theme page.
+          </li>
+          <img
+            src="/src/assets/theme_web_builder.png"
+            alt="theme builder icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Hero</strong> under Add Section.
+          </li>
+          <img
+            src="/src/assets/theme_hero_menu.png"
+            alt="Hero Image Menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Add Image</strong> on the right side.
+          </li>
+          <img
+            src="/src/assets/theme_add_hero_image.png"
+            alt="Add Hero Image"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Select the image you want to add as your Hero image. The first image
+            will be used as the desktop hero image and as a fallback for mobile.
+            If you add a second image, it becomes the mobile hero image.
+          </li>
+          <li class="step">Click on <strong>Publish</strong> to save.</li>
+        </ol>
+      </section>
+      <section id="s2" style="padding: 0">
+        <h2>How to Add the Store Logo Image on the Navigation Bar</h2>
+        <ol>
+          <li class="step">
+            Click on <strong>Store Information</strong> on the sidebar.
+          </li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Edit Store Information</strong>.
+          </li>
+          <img
+            src="/src/assets/theme_add_store_icon.png"
+            alt="add store icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on the image to select the image you want to use as your store
+            logo.
+          </li>
+          <li class="step">
+            After the image is uploaded, click
+            <strong>Save Store Settings</strong>.
+          </li>
+        </ol>
+      </section>
+      <section id="s3" style="padding: 0">
+        <h2>How to Add Your Social Handles</h2>
+        <ol>
+          <li class="step">Click on <strong>Store Information</strong>.</li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Edit Store Information</strong>.
+          </li>
+          <li class="step">
+            Scroll down to the <strong>Social Connections</strong> section.
+          </li>
+          <li class="step">Enter your business social media profile links.</li>
+          <img
+            src="/src/assets/theme_social_connection.png"
+            alt="social Connections"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Note Only links added here will appear in the website footer.
+          </li>
+          <li class="step">Click <strong>Save Store Settings</strong>.</li>
+        </ol>
+      </section>
+      <section id="s4" style="padding: 0">
+        <h2>How to Add Pages to Your Store</h2>
+        <ol>
+          <li class="step">Click on <strong>Pages</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_pages_menu.png"
+            alt="store pages"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Click <strong>Add New Page</strong>.</li>
+          <img
+            src="/src/assets/theme_add_pages.png"
+            alt="add pages"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enter the page name and click
+            <strong>Initialize Page Design</strong>.
+          </li>
+          <img
+            src="/src/assets/theme_initialize_page_design.png"
+            alt="Initialize Page"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Type the page content and click <strong>Publish Changes</strong>.
+          </li>
+          <li class="step">
+            You can create as many pages as needed; they automatically appear in
+            the footer.
+          </li>
+        </ol>
+      </section>
+      <section id="s5" style="padding: 0">
+        <h2>How to Setup WhatsApp Floating Button</h2>
+        <ol>
+          <li class="step">Click <strong>Store Information</strong>.</li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enter a WhatsApp number and save the store settings.
+          </li>
+          <img
+            src="/src/assets/theme_whatsapp_number.png"
+            alt="whatsapp number"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Go to <strong>Tools</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_tool_menu.png"
+            alt="tool menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Open <strong>Storefront Contact</strong> and enable the WhatsApp
+            Floating Button.
+          </li>
+          <img
+            src="/src/assets/theme_whatapp_floating_number.png"
+            alt="WhatsApp Floating Icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+        </ol>
+      </section>
+      <section id="s6" style="padding: 0">
+        <h2>How to Setup Payment Method</h2>
+        <ol>
+          <li class="step">Click <strong>Payments</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_payment_menu.png"
+            alt="payment menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Click <strong>Set Payment Method</strong>.</li>
+          <img
+            src="/src/assets/theme_configure_payment_method.png"
+            alt="set payment method"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enable card payments, bank transfers, payment on delivery, or any
+            combination of these methods.
+          </li>
+        </ol>
+      </section>
+    </div>
+  `;
+}
+
+function josaThemeDocContent() {
+  return `
+    <div class="container">
+      <div
+        class="table-of-contents"
+        style="
+          background-color: #f8f9fa;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 2rem;
+        "
+      >
+        <h2 style="margin-top: 0; font-size: 1.5rem; color: #333">
+          Table of Contents
+        </h2>
+        <ul style="list-style: none; padding-left: 0; margin-bottom: 0">
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s2"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >1. How to Add the Store Logo Image on the Navigation Bar</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s3"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >2. How to Add Your Social Handles</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s4"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >3. How to Add Pages to Your Store</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s5"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >4. How to Setup WhatsApp Floating Button</a
+            >
+          </li>
+          <li>
+            <a
+              href="#s6"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >5. How to Setup Payment Method</a
+            >
+          </li>
+        </ul>
+      </div>
+      <section id="s2" style="padding: 0">
+        <h2>How to Add the Store Logo Image on the Navigation Bar</h2>
+        <ol>
+          <li class="step">
+            Click on <strong>Store Information</strong> on the sidebar.
+          </li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Edit Store Information</strong>.
+          </li>
+          <img
+            src="/src/assets/theme_add_store_icon.png"
+            alt="add store icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on the image to select the image you want to use as your store
+            logo.
+          </li>
+          <li class="step">
+            After the image is uploaded, click
+            <strong>Save Store Settings</strong>.
+          </li>
+        </ol>
+      </section>
+      <section id="s3" style="padding: 0">
+        <h2>How to Add Your Social Handles</h2>
+        <ol>
+          <li class="step">Click on <strong>Store Information</strong>.</li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Edit Store Information</strong>.
+          </li>
+          <li class="step">
+            Scroll down to the <strong>Social Connections</strong> section.
+          </li>
+          <li class="step">Enter your business social media profile links.</li>
+          <img
+            src="/src/assets/theme_social_connection.png"
+            alt="social Connections"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Note Only links added here will appear in the website footer.
+          </li>
+          <li class="step">Click <strong>Save Store Settings</strong>.</li>
+        </ol>
+      </section>
+      <section id="s4" style="padding: 0">
+        <h2>How to Add Pages to Your Store</h2>
+        <ol>
+          <li class="step">Click on <strong>Pages</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_pages_menu.png"
+            alt="store pages"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Click <strong>Add New Page</strong>.</li>
+          <img
+            src="/src/assets/theme_add_pages.png"
+            alt="add pages"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enter the page name and click
+            <strong>Initialize Page Design</strong>.
+          </li>
+          <img
+            src="/src/assets/theme_initialize_page_design.png"
+            alt="Initialize Page"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Type the page content and click <strong>Publish Changes</strong>.
+          </li>
+          <li class="step">
+            You can create as many pages as needed; they automatically appear in
+            the footer.
+          </li>
+        </ol>
+      </section>
+      <section id="s5" style="padding: 0">
+        <h2>How to Setup WhatsApp Floating Button</h2>
+        <ol>
+          <li class="step">Click <strong>Store Information</strong>.</li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enter a WhatsApp number and save the store settings.
+          </li>
+          <img
+            src="/src/assets/theme_whatsapp_number.png"
+            alt="whatsapp number"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Go to <strong>Tools</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_tool_menu.png"
+            alt="tool menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Open <strong>Storefront Contact</strong> and enable the WhatsApp
+            Floating Button.
+          </li>
+          <img
+            src="/src/assets/theme_whatapp_floating_number.png"
+            alt="WhatsApp Floating Icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+        </ol>
+      </section>
+      <section id="s6" style="padding: 0">
+        <h2>How to Setup Payment Method</h2>
+        <ol>
+          <li class="step">Click <strong>Payments</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_payment_menu.png"
+            alt="payment menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Click <strong>Set Payment Method</strong>.</li>
+          <img
+            src="/src/assets/theme_configure_payment_method.png"
+            alt="set payment method"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enable card payments, bank transfers, payment on delivery, or any
+            combination of these methods.
+          </li>
+        </ol>
+      </section>
+    </div>
+  `;
+}
+
+function goblinThemeDocContent() {
+  return `
+  <div class="container">
+      <div
+        class="table-of-contents"
+        style="
+          background-color: #f8f9fa;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 2rem;
+        "
+      >
+        <h2 style="margin-top: 0; font-size: 1.5rem; color: #333">
+          Table of Contents
+        </h2>
+        <ul style="list-style: none; padding-left: 0; margin-bottom: 0">
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s1"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >1. How to Add Hero Images</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s2"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >2. How to Add the Store Logo Image on the Navigation Bar</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s3"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >3. How to Add Your Social Handles</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s4"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >4. How to Add Pages to Your Store</a
+            >
+          </li>
+          <li style="margin-bottom: 10px">
+            <a
+              href="#s5"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >5. How to Setup WhatsApp Floating Button</a
+            >
+          </li>
+          <li>
+            <a
+              href="#s6"
+              style="color: #0066cc; text-decoration: none; font-weight: 500"
+              >6. How to Setup Payment Method</a
+            >
+          </li>
+        </ul>
+      </div>
+      <section id="s1" style="padding: 0">
+        <h2>How to Add Hero Images</h2>
+        <ol>
+          <li class="step">
+            Go to <strong>Themes</strong> on the sidebar on the merchant
+            dashboard.
+          </li>
+          <img
+            src="/src/assets/theme_theme_icon.png"
+            alt="Add Hero Image"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Open Website Builder</strong> on the bottom right
+            corner of the Theme page.
+          </li>
+          <img
+            src="/src/assets/theme_web_builder.png"
+            alt="theme builder icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Hero</strong> under Add Section.
+          </li>
+          <img
+            src="/src/assets/theme_hero_menu.png"
+            alt="Hero Image Menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Add Image</strong> on the right side.
+          </li>
+          <img
+            src="/src/assets/theme_add_hero_image.png"
+            alt="Add Hero Image"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Select the image you want to add as your Hero image. The first image
+            will be used as the desktop hero image and as a fallback for mobile.
+            If you add a second image, it becomes the mobile hero image.
+          </li>
+          <li class="step">Click on <strong>Publish</strong> to save.</li>
+        </ol>
+      </section>
+      <section id="s2" style="padding: 0">
+        <h2>How to Add the Store Logo Image on the Navigation Bar</h2>
+        <ol>
+          <li class="step">
+            Click on <strong>Store Information</strong> on the sidebar.
+          </li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Edit Store Information</strong>.
+          </li>
+          <img
+            src="/src/assets/theme_add_store_icon.png"
+            alt="add store icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on the image to select the image you want to use as your store
+            logo.
+          </li>
+          <li class="step">
+            After the image is uploaded, click
+            <strong>Save Store Settings</strong>.
+          </li>
+        </ol>
+      </section>
+      <section id="s3" style="padding: 0">
+        <h2>How to Add Your Social Handles</h2>
+        <ol>
+          <li class="step">Click on <strong>Store Information</strong>.</li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Click on <strong>Edit Store Information</strong>.
+          </li>
+          <li class="step">
+            Scroll down to the <strong>Social Connections</strong> section.
+          </li>
+          <li class="step">Enter your business social media profile links.</li>
+          <img
+            src="/src/assets/theme_social_connection.png"
+            alt="social Connections"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Note Only links added here will appear in the website footer.
+          </li>
+          <li class="step">Click <strong>Save Store Settings</strong>.</li>
+        </ol>
+      </section>
+      <section id="s4" style="padding: 0">
+        <h2>How to Add Pages to Your Store</h2>
+        <ol>
+          <li class="step">Click on <strong>Pages</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_pages_menu.png"
+            alt="store pages"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Click <strong>Add New Page</strong>.</li>
+          <img
+            src="/src/assets/theme_add_pages.png"
+            alt="add pages"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enter the page name and click
+            <strong>Initialize Page Design</strong>.
+          </li>
+          <img
+            src="/src/assets/theme_initialize_page_design.png"
+            alt="Initialize Page"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Type the page content and click <strong>Publish Changes</strong>.
+          </li>
+          <li class="step">
+            You can create as many pages as needed; they automatically appear in
+            the footer.
+          </li>
+        </ol>
+      </section>
+      <section id="s5" style="padding: 0">
+        <h2>How to Setup WhatsApp Floating Button</h2>
+        <ol>
+          <li class="step">Click <strong>Store Information</strong>.</li>
+          <img
+            src="/src/assets/theme_store_information_menu.png"
+            alt="store information"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enter a WhatsApp number and save the store settings.
+          </li>
+          <img
+            src="/src/assets/theme_whatsapp_number.png"
+            alt="whatsapp number"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Go to <strong>Tools</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_tool_menu.png"
+            alt="tool menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Open <strong>Storefront Contact</strong> and enable the WhatsApp
+            Floating Button.
+          </li>
+          <img
+            src="/src/assets/theme_whatapp_floating_number.png"
+            alt="WhatsApp Floating Icon"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+        </ol>
+      </section>
+      <section id="s6" style="padding: 0">
+        <h2>How to Setup Payment Method</h2>
+        <ol>
+          <li class="step">Click <strong>Payments</strong> on the sidebar.</li>
+          <img
+            src="/src/assets/theme_payment_menu.png"
+            alt="payment menu"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">Click <strong>Set Payment Method</strong>.</li>
+          <img
+            src="/src/assets/theme_configure_payment_method.png"
+            alt="set payment method"
+            width="100%"
+            height="400"
+            style="margin-bottom: 30px; object-fit: contain"
+          />
+          <li class="step">
+            Enable card payments, bank transfers, payment on delivery, or any
+            combination of these methods.
+          </li>
+        </ol>
+      </section>
+    </div>
   `;
 }
